@@ -43,7 +43,7 @@
               <img src="@/assets/image/svg/navbar/BIRDS.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">BIRD</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-dog">
+            <div class="nav-pet-content-option nav-pet-content-option-dog" @click="router('category')">
               <img src="@/assets/image/svg/navbar/DOGS.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">DOG</div>
             </div>
@@ -58,19 +58,19 @@
           </div>
         </div>
       </div>
-      <div class="nav-option nav-option-cart">
+      <div class="nav-option nav-option-cart" @click="router('cart')">
         <img src="@/assets/image/svg/index/cart.svg" alt="">
         <div class="icon-font">Cart</div>
       </div>
-      <div class="nav-option nav-option-order">
+      <div class="nav-option nav-option-order" @click="router('orderList')">
         <img src="@/assets/image/svg/index/order.svg" alt="">
         <div class="icon-font">Order</div>
       </div>
-      <div class="nav-option nav-option-collection">
+      <div class="nav-option nav-option-collection" @click="router('collection')">
         <img src="@/assets/image/svg/index/collection.svg" alt="">
         <div class="icon-font">Collection</div>
       </div>
-      <div class="nav-option nav-option-search">
+      <div class="nav-option nav-option-search" @click="router('search')">
         <img src="@/assets/image/svg/index/search.svg" alt="">
         <div class="icon-font">Search</div>
       </div>
@@ -109,7 +109,11 @@
 <script>
 export default {
   name: "navBar",
-
+  methods: {
+    router(route) {
+      this.$router.push(`/main/${route}`);
+    }
+  }
 }
 </script>
 
@@ -196,7 +200,7 @@ export default {
         top: 70px;
         display: flex;
         flex-direction: column;
-        justify-content: start;
+        justify-content: flex-start;
         align-items: center;
         opacity: 0;
         visibility: hidden;

@@ -1,8 +1,8 @@
 <template>
   <div class="home">
     <top></top>
-<!--    <medium></medium>-->
-<!--    <bottom></bottom>-->
+    <medium></medium>
+    <bottom></bottom>
   </div>
 </template>
 

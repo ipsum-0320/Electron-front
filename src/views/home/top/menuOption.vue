@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-option">
+  <div class="icon">
     <img :src="require('@/assets/image/svg/index/' + type.split(' ').join('').toLowerCase() + '.svg')" alt="">
     <!--  webpack 为什么不解析如下代码？ -->
     <!--
@@ -19,6 +19,43 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  .icon {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    cursor: pointer;
 
+    &::before {
+       content: '';
+       width: 90%;
+       height: 90%;
+       background-color: transparent;
+       border: 5px dashed #11564b;
+       border-radius: 10px;
+       position: absolute;
+       opacity: 0;
+       transition: opacity .5s;
+     }
+
+    &:hover::before {
+       opacity: 1;
+     }
+
+    .icon-font {
+      font-size: 18px;
+      letter-spacing: 1px;
+      position: relative;
+      top: -15px;
+      font-weight: bold;
+      color: #11564b;
+    }
+
+    img {
+      display: block;
+      width: 50%;
+      height: 50%;
+    }
+  }
 </style>
