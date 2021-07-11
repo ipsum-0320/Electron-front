@@ -65,14 +65,14 @@ const routes = [
           {
             path: 'collection',
             name: 'collection',
-            component: () => import("@/views/collection/collection"),
+            component: () => import("@/views/user/collection/collection"),
           },
         ]
       },
       {
         path: 'message',
         name: 'message',
-        component: () => import("@/views/user/message/index")
+        component: () => import("@/views/message/index")
       }
     ]
   }

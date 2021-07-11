@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import CollectedProduct from "@/views/collection/collectedProduct";
+import CollectedProduct from "@/views/user/collection/collectedProduct";
 export default {
   name: "collection",
   components: {CollectedProduct},
