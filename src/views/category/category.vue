@@ -5,13 +5,13 @@
         <img src="@/assets/image/svg/navbar/DOGS.svg" alt="">
         <div class="category-title-text">DOG</div>
       </div>
-      <div class="back-to-index">
+      <div class="back-to-index" @click="router('/home')">
         <span>Back to Homepage</span>
       </div>
       <div class="category-content" >
         <div class="products">
           <div class="products-content" :style="{width:productWidth}">
-            <div class="product" v-for="product in products" ref="product" @click="router">
+            <div class="product" v-for="product in products" ref="product" @click="router('/main/product')">
               <div class="mask">
                 <img src="@/assets/image/svg/category/collection.svg" alt="" v-if="product.isCollected">
                 <img src="@/assets/image/svg/category/uncollection.svg" alt="" v-else>
@@ -87,8 +87,8 @@ export default {
     }
   },
   methods: {
-    router() {
-      this.$router.push('/main/product')
+    router(route) {
+      this.$router.push(route)
     }
   }
 }

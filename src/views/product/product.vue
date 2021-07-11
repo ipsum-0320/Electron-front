@@ -2,7 +2,7 @@
   <div>
     <div class="product-content">
       <div class="product-title">Bulldog</div>
-      <div class="back-to-category">
+      <div class="back-to-category" @click="backToCategory">
         <span>Back to Category</span>
       </div>
       <div class="product-container">
@@ -121,6 +121,9 @@ export default {
     }
   },
   methods: {
+    backToCategory() {
+      this.$router.push('/main/category');
+    },
     subQuantity() {
       this.quantity--
     },
@@ -131,8 +134,7 @@ export default {
       this.collectionActive = !this.collectionActive
     },
     clickAddCart() {
-      this.addCartActive = true
-      setTimeout(() => this.addCartActive = false, 1000)
+      this.addCartActive = true;
       this.quantityInCart++
     },
     clickImg(index) {

@@ -1,6 +1,6 @@
 <template>
   <div class="item">
-    <a href="" class="category_item" :id="category.toLowerCase()">
+    <a href="" class="category_item" :id="category.toLowerCase()" @click.prevent="router">
       <div class="category-image">
         <img :src="require('@/assets/image/index/' + category.toLowerCase() + '-category.jpg')" alt="">
       </div>
@@ -17,6 +17,11 @@ export default {
   name: "category_item",
   props: {
     category: String
+  },
+  methods: {
+    router() {
+      this.$router.push('/main/category')
+    },
   }
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="icon">
+  <div class="icon" @click="router(type)">
     <img :src="require('@/assets/image/svg/index/' + type.split(' ').join('').toLowerCase() + '.svg')" alt="">
     <!--  webpack 为什么不解析如下代码？ -->
     <!--
@@ -11,10 +11,34 @@
 </template>
 
 <script>
+
+import { ElMessage  } from "element-plus";
+
 export default {
   name: "menuOption",
   props: {
     type: String
+  },
+  methods: {
+    router(route) {
+      if (route === 'Order') {
+        this.$router.push('/main/orderList');
+      } else if (route === 'Sign Out') {
+        this.$store.commit('setIsLogin', false);
+        this.$router.push('/login');
+        ElMessage({
+          showClose: true,
+          center: true,
+          message: 'Sign out successfully.',
+          type: 'success',
+          duration: 2000
+        });
+      } else if (route === 'Profile') {
+        this.$router.push('/main/user/profile');
+      } else {
+        this.$router.push(`/main/${route.toLowerCase()}`);
+      }
+    }
   }
 }
 </script>

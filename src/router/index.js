@@ -46,6 +46,34 @@ const routes = [
         name: 'search',
         component: () => import("@/views/search/search")
       },
+      {
+        path: 'user',
+        name: 'user',
+        redirect: 'profile',
+        component: () => import("@/views/user/index"),
+        children: [
+          {
+            path: 'profile',
+            name: 'profile',
+            component: () => import("@/views/user/profile/index")
+          },
+          {
+            path: 'log',
+            name: 'log',
+            component: () => import("@/views/user/log/index")
+          },
+          {
+            path: 'collection',
+            name: 'collection',
+            component: () => import("@/views/collection/collection"),
+          },
+        ]
+      },
+      {
+        path: 'message',
+        name: 'message',
+        component: () => import("@/views/user/message/index")
+      }
     ]
   }
 ]

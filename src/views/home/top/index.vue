@@ -17,7 +17,7 @@
       <img src="@/assets/image/index/dog-title.jpg" alt="loading..." class="fromBottomImg">
     </div>
     <div class="menu" :class="{ 'anim-menu-fade-in': anim_menu_fade_in, 'anim-menu-fade-out': anim_menu_fade_out }">
-      <div class="filter" @click="toLogin">
+      <div class="filter" @click="toLogin" v-if="!$store.state.isLogin">
         <div class="icon">
           <img src="@/assets/image/svg/index/signIn.svg" alt="">
           <div class="icon-font">Sign In</div>
@@ -48,7 +48,7 @@ export default {
   },
   data() {
     return {
-      menuOptions: ['Profile', 'Cart', 'Order', 'Collection', 'Search', 'Sign Out'],
+      menuOptions: ['Profile', 'Cart', 'Order', 'Message', 'Search', 'Sign Out'],
       logoLetter: [
         { content: 'P', isMove: false },
         { content: 'e', isMove: false },

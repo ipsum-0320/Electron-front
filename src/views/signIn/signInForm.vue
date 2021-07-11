@@ -5,17 +5,17 @@
       <form class="form-content">
         <div class="form-element">
           <img src="@/assets/image/svg/signIn/account.svg" alt="">
-          <input type="text" class="form-text" autofocus required>
+          <input type="text" class="form-text" autofocus required v-model="username">
           <div class="form-element-label">Username</div>
         </div>
         <div class="form-element">
           <img src="@/assets/image/svg/signIn/password.svg" alt="">
-          <input type="password" class="form-text" required>
+          <input type="password" class="form-text" required v-model="password">
           <div class="form-element-label">Password</div>
         </div>
         <div class="form-element validate-form-element">
           <img src="@/assets/image/svg/signIn/validate.svg" alt="">
-          <input type="text" class="form-text" required>
+          <input type="text" class="form-text" required v-model="validateCode">
           <div class="form-element-label">Validate</div>
           <div class="get-validate-btn" @click="validate" :class="{ 'get-validate-btn-opacity0': isValidateOpacity0 }">{{ isValidate ? validateContent : 'click me' }}</div>
         </div>
@@ -127,6 +127,9 @@
 </template>
 
 <script>
+import { login } from "@/api/login";
+import { ElMessage  } from "element-plus";
+
 export default {
   name: "signInForm",
   data() {
@@ -135,6 +138,9 @@ export default {
       isValidateOpacity0: false,
       isValidate: false,
       validateContent: undefined,
+      validateCode: '',
+      username: '',
+      password: ''
     }
   },
   props: {
@@ -155,40 +161,58 @@ export default {
         this.isValidateOpacity0 = false;
       }, 500);
     },
-    loginSubmit() {
+    async loginSubmit() {
       document.querySelector('.login-form .base-form-button').style['opacity'] = '0';
       document.querySelector('.login-form .base-form-button').style['visibility'] = 'hidden';
+      // 等待图标出现.
       document.querySelector('.login-form .waiting').style['opacity'] = '1';
       document.querySelector('.login-form .waiting').style['visibility'] = 'visible';
-      setTimeout(() => {
-        document.querySelector('.login-form .waiting').style['opacity'] = '0';
-        document.querySelector('.login-form .waiting').style['visibility'] = 'hidden';
-        document.querySelector('.login-form .result-button').style['opacity'] = '1';
-        document.querySelector('.login-form .result-button').style['visibility'] = 'visible';
-        if(false) {
-          document.querySelector('.login-form .result:nth-child(2)').classList.remove('active-result');
-          setTimeout(() => {
-            document.querySelector('.login-form .result:nth-child(1)').classList.add('active-result');
-            setTimeout(() => {
-              this.$router.push('/home');
-            }, 1000);
-          }, 1000);
+      try {
+        const res = await login(this.username, this.password)
+        if (res.msg === 'Invalid username or password. Signon failed.') {
+          this.$store.commit('setIsLogin', false);
         } else {
-          document.querySelector('.login-form .result:nth-child(1)').classList.remove('active-result');
-          setTimeout(() => {
-            document.querySelector('.login-form .result:nth-child(2)').classList.add('active-result');
-            setTimeout(() => {
-              document.querySelector('.login-form .result-button').style['opacity'] = '0';
-              document.querySelector('.login-form .result-button').style['visibility'] = 'hidden';
-              setTimeout(() => {
-                document.querySelector('.login-form .result:nth-child(2)').classList.remove('active-result');
-                document.querySelector('.login-form .base-form-button').style['opacity'] = '1';
-                document.querySelector('.login-form .base-form-button').style['visibility'] = 'visible';
-              }, 1500);
-            }, 1000);
-          }, 1000);
+          this.$store.commit('setIsLogin', true);
         }
-      }, 1000);
+        setTimeout(() => {
+          document.querySelector('.login-form .waiting').style['opacity'] = '0';
+          document.querySelector('.login-form .waiting').style['visibility'] = 'hidden';
+          document.querySelector('.login-form .result-button').style['opacity'] = '1';
+          document.querySelector('.login-form .result-button').style['visibility'] = 'visible';
+          if(this.$store.state.isLogin) {
+            document.querySelector('.login-form .result:nth-child(2)').classList.remove('active-result');
+            setTimeout(() => {
+              document.querySelector('.login-form .result:nth-child(1)').classList.add('active-result');
+              setTimeout(() => {
+                this.$router.push('/home');
+              }, 1000);
+            }, 1000);
+          } else {
+            document.querySelector('.login-form .result:nth-child(1)').classList.remove('active-result');
+            setTimeout(() => {
+              ElMessage({
+                showClose: true,
+                center: true,
+                message: 'Invalid username or password.',
+                type: 'error',
+                duration: 2000
+              });
+              document.querySelector('.login-form .result:nth-child(2)').classList.add('active-result');
+              setTimeout(() => {
+                document.querySelector('.login-form .result-button').style['opacity'] = '0';
+                document.querySelector('.login-form .result-button').style['visibility'] = 'hidden';
+                setTimeout(() => {
+                  document.querySelector('.login-form .result:nth-child(2)').classList.remove('active-result');
+                  document.querySelector('.login-form .base-form-button').style['opacity'] = '1';
+                  document.querySelector('.login-form .base-form-button').style['visibility'] = 'visible';
+                }, 1500);
+              }, 1000);
+            }, 1000);
+          }
+        }, 1000);
+      } catch (err) {
+        console.error(err);
+      }
     },
     registerSubmit() {
       document.querySelector('.register-form #register-submit').style['opacity'] = '0';

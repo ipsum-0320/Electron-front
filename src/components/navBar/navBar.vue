@@ -1,6 +1,6 @@
 <template>
   <div class="nav-bar">
-    <div class="web-logo">
+    <div class="web-logo" @click="router('/home')">
       <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" class="logo-image">
         <path d="M314.9824 571.35104c78.2336-17.24416
         103.2192-87.28576 68.9152-166.4-13.55776-31.3344-68.28032-138.69056-90.7264-182.59968-12.14464 10.19904-22.17984
@@ -43,7 +43,7 @@
               <img src="@/assets/image/svg/navbar/BIRDS.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">BIRD</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-dog" @click="router('category')">
+            <div class="nav-pet-content-option nav-pet-content-option-dog" @click="router('/main/category')">
               <img src="@/assets/image/svg/navbar/DOGS.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">DOG</div>
             </div>
@@ -58,21 +58,21 @@
           </div>
         </div>
       </div>
-      <div class="nav-option nav-option-cart" @click="router('cart')">
+      <div class="nav-option nav-option-cart" @click="router('/main/cart')">
         <img src="@/assets/image/svg/index/cart.svg" alt="">
         <div class="icon-font">Cart</div>
       </div>
-      <div class="nav-option nav-option-order" @click="router('orderList')">
+      <div class="nav-option nav-option-order" @click="router('/main/orderList')">
         <img src="@/assets/image/svg/index/order.svg" alt="">
         <div class="icon-font">Order</div>
       </div>
-      <div class="nav-option nav-option-collection" @click="router('collection')">
-        <img src="@/assets/image/svg/index/collection.svg" alt="">
-        <div class="icon-font">Collection</div>
-      </div>
-      <div class="nav-option nav-option-search" @click="router('search')">
+      <div class="nav-option nav-option-search" @click="router('/main/search')">
         <img src="@/assets/image/svg/index/search.svg" alt="">
         <div class="icon-font">Search</div>
+      </div>
+      <div class="nav-option nav-option-collection" @click="router('/main/message')">
+        <img src="@/assets/image/svg/navbar/message.svg" alt="">
+        <div class="icon-font">Message</div>
       </div>
     </div>
     <div class="avatar">
@@ -81,21 +81,21 @@
         <div class="profile-name">lorem ipsum.</div>
         <div class="divide-line"></div>
         <div class="profile-group">
-          <div class="profile-option">
+          <div class="profile-option" @click="router('/main/user/profile')">
             <img src="@/assets/image/svg/index/profile.svg" alt="" class="icon">
             <div class="icon-font">Profile</div>
           </div>
-          <div class="profile-option">
+          <div class="profile-option" @click="router('/main/user/log')">
             <img src="@/assets/image/svg/navbar/log.svg" alt="" class="icon">
             <div class="icon-font">Log</div>
           </div>
-          <div class="profile-option">
-            <img src="@/assets/image/svg/navbar/balance.svg" alt="" class="icon">
-            <div class="icon-font">Balance</div>
+          <div class="profile-option" @click="router('/main/user/collection')">
+            <img src="@/assets/image/svg/index/collection.svg" alt="" class="icon">
+            <div class="icon-font">Collection</div>
           </div>
         </div>
         <div class="divide-line"></div>
-        <div class="profile-group">
+        <div class="profile-group" @click="signOut">
           <div class="profile-option signOut-profile-option">
             <img src="@/assets/image/svg/index/signout.svg" alt="" class="icon">
             <div class="icon-font">Sign Out</div>
@@ -107,11 +107,24 @@
 </template>
 
 <script>
+import {ElMessage} from "element-plus";
+
 export default {
   name: "navBar",
   methods: {
     router(route) {
-      this.$router.push(`/main/${route}`);
+      this.$router.push(route);
+    },
+    signOut() {
+      this.$store.commit('setIsLogin', false);
+      this.$router.push('/login');
+      ElMessage({
+        showClose: true,
+        center: true,
+        message: 'Sign out successfully.',
+        type: 'success',
+        duration: 2000
+      });
     }
   }
 }
