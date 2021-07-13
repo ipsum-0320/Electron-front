@@ -27,6 +27,11 @@ const routes = [
         component: () => import("@/views/cart/cart")
       },
       {
+        path: 'order',
+        name: 'order',
+        component: () => import("@/views/order/order")
+      },
+      {
         path: 'orderList',
         name: 'orderList',
         component: () => import("@/views/orderList/orderList")

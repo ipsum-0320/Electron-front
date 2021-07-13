@@ -2,79 +2,84 @@
   <div>
     <div class="product-content">
       <div class="product-title">Bulldog</div>
-      <div class="back-to-category" @click="backToCategory">
+      <div class="back-to-category" @click="$router.push('/main/category')">
         <span>Back to Category</span>
       </div>
-      <div class="product-container">
-        <div class="product-info">
-          <div class="product-main-image" @mousemove="mouseMove()" @mouseleave="mouseLeave()" ref="mainImg">
-            <img :src='require("@/assets/image/petImg" + mainImg)' alt="">
-            <div class="pointer-box" v-show="isShow" ref="pointerBox"></div>
-          </div>
-          <div class="thumbnail-images">
-            <img v-for="(img,index) in imgs" :src='require("@/assets/image/petImg"+img)' @click="clickImg(index)" alt="" tabindex="-1">
-          </div>
-        </div>
-        <div class="buy-form">
-          <img src="@/assets/image/svg/category/uncollection.svg" alt="" @click="triggerCollection" class="uncollection" :class="{active:collectionActive}">
-          <img src="@/assets/image/svg/category/collection.svg" alt="" @click="triggerCollection" class="collection" :class="{active: !collectionActive}">
-          <div class="enlarge-image" v-show="isShow" ref="enlargeImg">
-            <img src="@/assets/image/petImg/dog/dogImg1.jpg" alt="" class="enlarge-image-img" ref="enlargeImgImg">
-          </div>
-          <form class="buy-form-content">
-            <div class="buy-form-info">
-              <div class="choose-item">
-                <div class="form-info-title">Item:</div>
-                <div class="choose-item-options">
-                  <div class="option-container">
-                    <input type="radio" id="option1" name="choose-item" class="real-radio">
-                    <label for="option1" class="fake-radio">Lorem ipsum dolor</label>
-                  </div>
-                  <div class="option-container">
-                    <input type="radio" id="option2" name="choose-item" class="real-radio">
-                    <label for="option2" class="fake-radio">dolor sit amet</label>
-                  </div>
-                  <div class="option-container">
-                    <input type="radio" id="option3" name="choose-item" class="real-radio">
-                    <label for="option3" class="fake-radio">consec adipic elit</label>
-                  </div>
-                  <div class="option-container">
-                    <input type="radio" id="option4" name="choose-item" class="real-radio">
-                    <label for="option4" class="fake-radio">optio quis volupt</label>
-                  </div>
-                </div>
-              </div>
-              <div class="product-price">
-                <div class="form-info-title">Price:</div>
-                <div class="product-price-content">
-                  $200.00
-                </div>
-              </div>
-              <div class="product-stock">
-                <div class="form-info-title">Stock:</div>
-                <div class="product-stock-content">
-                  153 only
-                </div>
-              </div>
-              <div class="product-quantity">
-                <div class="form-info-title">Quantity:</div>
-                <div class="product-quantity-content">
-                  <div class="minus-btn" :class="{negative:quantity === 1}" @click="subQuantity()" ><span>－</span></div>
-                  <input type="text" disabled class="product-quantity-text" :value=quantity>
-                  <div class="add-btn" @click="addQuantity()"><span>＋</span></div>
-                </div>
-              </div>
-            </div>
-            <div class="buy-form-btn">
-              <div class="buy-now-btn">Buy now</div>
-              <div class="add-cart-btn" :class="{active:addCartActive}" @click="clickAddCart">
-                <span>Add to cart</span>
-                <img src="@/assets/image/svg/web_logo.svg" alt="">
-              </div>
-            </div>
-          </form>
-        </div>
+      <div class="check-trigger">
+        <span @click="clickTrigger">Check {{checkProduct == true?"Product":"Comment"}}</span>
       </div>
+      <transition name="fade">
+        <div class="product-container" v-if="checkProduct">
+          <div class="product-info">
+            <div class="product-main-image" @mousemove="mouseMove()" @mouseleave="mouseLeave()" ref="mainImg">
+              <img :src='require("@/assets/image/petImg" + mainImg)' alt="">
+              <div class="pointer-box" v-show="isShow" ref="pointerBox"></div>
+            </div>
+            <div class="thumbnail-images">
+              <img v-for="(img,index) in imgs" :src='require("@/assets/image/petImg"+img)' @click="clickImg(index)" alt="" tabindex="-1">
+            </div>
+          </div>
+          <div class="buy-form">
+            <img src="@/assets/image/svg/category/uncollection.svg" alt="" @click="triggerCollection" class="uncollection" :class="{active:collectionActive}">
+            <img src="@/assets/image/svg/category/collection.svg" alt="" @click="triggerCollection" class="collection" :class="{active: !collectionActive}">
+            <div class="enlarge-image" v-show="isShow" ref="enlargeImg">
+              <img src="@/assets/image/petImg/dog/dogImg1.jpg" alt="" class="enlarge-image-img" ref="enlargeImgImg">
+            </div>
+            <form class="buy-form-content">
+              <div class="buy-form-info">
+                <div class="choose-item">
+                  <div class="form-info-title">Item:</div>
+                  <div class="choose-item-options">
+                    <div class="option-container">
+                      <input type="radio" id="option1" name="choose-item" class="real-radio">
+                      <label for="option1" class="fake-radio">Lorem ipsum dolor</label>
+                    </div>
+                    <div class="option-container">
+                      <input type="radio" id="option2" name="choose-item" class="real-radio">
+                      <label for="option2" class="fake-radio">dolor sit amet</label>
+                    </div>
+                    <div class="option-container">
+                      <input type="radio" id="option3" name="choose-item" class="real-radio">
+                      <label for="option3" class="fake-radio">consec adipic elit</label>
+                    </div>
+                    <div class="option-container">
+                      <input type="radio" id="option4" name="choose-item" class="real-radio">
+                      <label for="option4" class="fake-radio">optio quis volupt</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="product-price">
+                  <div class="form-info-title">Price:</div>
+                  <div class="product-price-content">
+                    $200.00
+                  </div>
+                </div>
+                <div class="product-stock">
+                  <div class="form-info-title">Stock:</div>
+                  <div class="product-stock-content">
+                    153 only
+                  </div>
+                </div>
+                <div class="product-quantity">
+                  <div class="form-info-title">Quantity:</div>
+                  <div class="product-quantity-content">
+                    <div class="minus-btn" :class="{negative:quantity === 1}" @click="subQuantity()" ><span>－</span></div>
+                    <input type="text" disabled class="product-quantity-text" :value=quantity>
+                    <div class="add-btn" @click="addQuantity()"><span>＋</span></div>
+                  </div>
+                </div>
+              </div>
+              <div class="buy-form-btn">
+                <div class="buy-now-btn" @click="$router.push('/main/order')">Buy now</div>
+                <div class="add-cart-btn" :class="{active:addCartActive}" @click="clickAddCart">
+                  <span>Add to cart</span>
+                  <img src="@/assets/image/svg/web_logo.svg" alt="">
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </transition>
       <div class="cart-link">
         <svg viewBox="0 0 1024 1024">
           <path d="M332.8 790.528q19.456 0 36.864 7.168t30.208 19.968 20.48 30.208 7.68 36.864-7.68 36.864-20.48 30.208-30.208
@@ -92,13 +97,18 @@
         </svg>
         <div class="cart-num-tip">{{quantityInCart}}</div>
       </div>
+      <transition name="fade">
+        <comment v-if="!checkProduct"></comment>
+      </transition>
     </div>
   </div>
 </template>
 
 <script>
+import Comment from "@/views/product/comment";
 export default {
   name: "product",
+  components: {Comment},
   data() {
     return {
       quantity: 1,
@@ -112,7 +122,8 @@ export default {
         "/dog/dogImg4.jpg"
       ],
       mainImgIndex: 0,
-      isShow: false
+      isShow: false,
+      checkProduct: true
     }
   },
   computed: {
@@ -121,9 +132,6 @@ export default {
     }
   },
   methods: {
-    backToCategory() {
-      this.$router.push('/main/category');
-    },
     subQuantity() {
       this.quantity--
     },
@@ -134,7 +142,8 @@ export default {
       this.collectionActive = !this.collectionActive
     },
     clickAddCart() {
-      this.addCartActive = true;
+      this.addCartActive = true
+      setTimeout(() => this.addCartActive = false, 1000)
       this.quantityInCart++
     },
     clickImg(index) {
@@ -183,6 +192,9 @@ export default {
     },
     mouseLeave() {
       this.isShow = false
+    },
+    clickTrigger() {
+      this.checkProduct = !this.checkProduct
     }
   }
 }
@@ -239,13 +251,12 @@ export default {
     }
   }
 
-  .back-to-category {
+  .check-trigger,.back-to-category {
     position: absolute;
     top: 25px;
-    left: 0;
     width: 230px;
     height: 40px;
-    background-image: linear-gradient(to right, rgba(214, 213, 183, 1) 90%, rgba(214, 213, 183, 0));
+
     border-top: 3px solid #11564b;
     border-bottom: 3px solid #11564b;
     color: #11564b;
@@ -257,6 +268,7 @@ export default {
     cursor: pointer;
     span {
       transition: transform .5s;
+      cursor: pointer;
     }
     &:hover {
       span {
@@ -265,12 +277,22 @@ export default {
     }
   }
 
+  .check-trigger {
+    right: 0;
+    background-image: linear-gradient(to left, rgba(214, 213, 183, 1) 90%, rgba(214, 213, 183, 0));
+  }
+
+  .back-to-category {
+    left: 0;
+    background-image: linear-gradient(to right, rgba(214, 213, 183, 1) 90%, rgba(214, 213, 183, 0));
+  }
+
   .product-container {
     width: 80%;
     height: 75%;
     position: absolute;
     left: 50%;
-    top: 110px;
+    top: 100px;
     transform: translateX(-50%);
     display: flex;
     justify-content: center;
@@ -751,6 +773,34 @@ export default {
       align-items: center;
     }
 
+  }
+
+  .fade-enter-from {
+    opacity: 0;
+    transform: translateX(calc(-50% + 100vw));
+  }
+
+  .fade-enter-active {
+    transition: all 1s ease;
+  }
+
+  .fade-enter-to {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+
+  .fade-leave-from {
+    opacity: 1;
+    transform: translateX(-50%);
+  }
+
+  .fade-leave-active {
+    transition: all 1s ease;
+  }
+
+  .fade-leave-to {
+    opacity: 0;
+    transform: translateX(calc(-50% - 100vw));
   }
 
 }

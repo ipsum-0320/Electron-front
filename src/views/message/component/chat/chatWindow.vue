@@ -59,9 +59,14 @@ export default {
           position: absolute;
 
           .main-content {
-            height: 60px;
-            width: 140px;
-            border: ;
+            height: 160px;
+            width: 340px;
+            border: 3px solid #11564b;
+            position: absolute;
+            bottom: 29px;
+            border-radius: 5px;
+            visibility: hidden;
+            opacity: 0;
           }
 
 
@@ -72,6 +77,13 @@ export default {
             position: relative;
             bottom: 20px;
             left: 5px;
+          }
+
+          &:focus-within {
+            .main-content {
+              opacity: 1;
+              visibility: visible;
+            }
           }
 
         }
