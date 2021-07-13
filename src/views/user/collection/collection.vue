@@ -21,23 +21,23 @@ export default {
     return {
       collections: [
         {
-          name:'BullGog1',
+          name:'BullDog1',
           imgSrc:'petImg/cat/catImg.jpg'
         },
         {
-          name:'BullGog2',
+          name:'BullDog2',
           imgSrc:'petImg/cat/catImg.jpg'
         },
         {
-          name:'BullGog3',
+          name:'BullDog3',
           imgSrc:'petImg/cat/catImg.jpg'
         },
         {
-          name:'BullGog4',
+          name:'BullDog4',
           imgSrc:'petImg/cat/catImg.jpg'
         },
         {
-          name:'BullGog5',
+          name:'BullDog5',
           imgSrc:'petImg/cat/catImg.jpg'
         }
       ]

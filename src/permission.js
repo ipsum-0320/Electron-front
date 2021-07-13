@@ -6,6 +6,11 @@ import store from './store'
 router.beforeEach((to, from, next) => {
   NProgress.start()
   if(to.path === '/login' || to.path === '/home') {
+    if(to.path === '/login' && store.state.isLogin) {
+      next({
+        path: '/home'
+      });
+    }
     next()
   } else {
     if(!store.state.isLogin) {

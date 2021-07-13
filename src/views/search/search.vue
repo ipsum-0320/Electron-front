@@ -45,7 +45,7 @@
         </div>
         <div class="result" v-show="!isShow">
           <div class="result-item" v-for="item in resultItems">
-            <img :src="require('@/assets/image/petImg/cat/catImg.jpg')">
+            <img :src="require('@/assets/image/petImg/cat/catImg.jpg')" alt="">
             <div class="description">{{item.description}}</div>
             <div class="productId">{{item.productId}}</div>
           </div>

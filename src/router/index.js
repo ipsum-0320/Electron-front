@@ -49,7 +49,7 @@ const routes = [
       {
         path: 'user',
         name: 'user',
-        redirect: 'profile',
+        redirect: '/main/user/profile',
         component: () => import("@/views/user/index"),
         children: [
           {
@@ -72,7 +72,25 @@ const routes = [
       {
         path: 'message',
         name: 'message',
-        component: () => import("@/views/message/index")
+        redirect: '/main/message/comment',
+        component: () => import("@/views/message/index"),
+        children: [
+          {
+            path: 'comment',
+            name: 'comment',
+            component: () => import("@/views/message/component/comment")
+          },
+          {
+            path: 'reply',
+            name: 'reply',
+            component: () => import("@/views/message/component/reply")
+          },
+          {
+            path: 'chat',
+            name: 'chat',
+            component: () => import("@/views/message/component/chat/index")
+          }
+        ]
       }
     ]
   }
