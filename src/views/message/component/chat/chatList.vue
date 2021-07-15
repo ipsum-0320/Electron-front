@@ -1,5 +1,5 @@
 <template>
-  <div class="list" :style="{ width: (272 + listWidth) + 'px' }">
+  <div class="list" :style="{ width: 'calc(27% + ' + listWidth + 'px' }">
     <div class="list-item" v-for="item in listItems">
       <img :src="deleteImg" alt="" class="delete">
       <div class="avatar-content" :class="{ 'avatar-tip': item.isRead }">

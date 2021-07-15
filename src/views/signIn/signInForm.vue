@@ -168,11 +168,13 @@ export default {
       document.querySelector('.login-form .waiting').style['opacity'] = '1';
       document.querySelector('.login-form .waiting').style['visibility'] = 'visible';
       try {
-        const res = await login(this.username, this.password)
-        if (res.msg === 'Invalid username or password. Signon failed.') {
+        const res = await login(this.username, this.password);
+        if (res.code === 10001) {
           this.$store.commit('setIsLogin', false);
         } else {
           this.$store.commit('setIsLogin', true);
+          this.$store.commit('login', this.username);
+          this.$store.commit('createWebSocket', this.username);
         }
         setTimeout(() => {
           document.querySelector('.login-form .waiting').style['opacity'] = '0';

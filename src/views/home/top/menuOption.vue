@@ -25,6 +25,9 @@ export default {
         this.$router.push('/main/orderList');
       } else if (route === 'Sign Out') {
         this.$store.commit('setIsLogin', false);
+        this.$store.commit('login', undefined);
+        this.$store.commit('setToken', undefined);
+        this.$store.commit('closeWebSocket');
         this.$router.push('/login');
         ElMessage({
           showClose: true,

@@ -10,3 +10,43 @@ export function login(username, password) {
     }
   });
 }
+
+export function registerAccount(data) {
+  return request({
+    url: '/newAccount',
+    method: 'post',
+    data: {
+      data
+    }
+  });
+}
+
+export function viewAccount(username) {
+  return request({
+    url: '/viewEditAccount',
+    method: 'get',
+    data: {
+      username
+    }
+  });
+}
+
+export function editAccount(data) {
+  return request({
+    url: '/editAccount',
+    method: 'post',
+    data: {
+      data
+    }
+  });
+}
+
+export function getHeadJpg(username) {
+  return request({
+    url: '/getHeadJpg',
+    method: 'get',
+    data: {
+      username
+    }
+  });
+}
