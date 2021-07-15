@@ -1,6 +1,6 @@
 <template>
   <div class="window" :style="{ width: 'calc(68.5% - ' + windowWidth + 'px' }">
-    <div class="chat-window">
+    <div class="chat-window" v-if="chatToUsername !== undefined">
       <div class="chat-message-item">
         <img src="@/assets/image/avatar/avatar.jpg" alt="" class="chat-avatar">
         <div class="chat-bubble">
@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="enterArea">
+    <div class="enterArea" v-if="chatToUsername !== undefined">
       <div class="expression" tabindex="-1">
         <div class="expression-content">
           <div class="main-content">
@@ -55,6 +55,12 @@
         <svg viewBox="0 0 1024 1024"><path d="M915.515 142.82L98.213 458.2c-46.058 17.772-44.905 43.6 2.349 57.622l197.477 58.595 80.292 238.91c10.512 31.279 37.973 37.875 61.463 14.605L543.378 725.32l204.475 149.84c26.566 19.468 53.879 9.222 61.05-23.09l149.21-672.345c7.151-32.22-11.894-48.753-42.598-36.906zM791.141 294.833l-348.62 310.61c-6.268 5.586-11.941 16.653-12.812 24.847l-15.39 144.698c-1.729 16.248-7.331 16.919-12.498 1.345l-67.457-203.339c-2.64-7.954 0.976-17.705 8.022-21.93L784.5 285.882c28.174-16.898 31.173-12.907 6.64 8.951z"></path></svg>
       </div>
     </div>
+    <div class="empty" v-else>
+      <img src="@/assets/image/svg/message/toLeft.svg" alt="">
+      <div class="chat-tips">
+        Find someone to chat!
+      </div>
+    </div>
   </div>
 </template>
 
@@ -63,7 +69,8 @@
 export default {
   name: "chatWindow",
   props: {
-    windowWidth: String
+    windowWidth: String,
+    chatToUsername: String,
   },
   data() {
     return {
@@ -90,7 +97,6 @@ export default {
         username: '',
         toUsername: '',
       }
-      sendMessage().then().catch();
     }
   }
 }
@@ -360,6 +366,33 @@ export default {
           }
         }
 
+      }
+
+    }
+
+    .empty {
+      width: 80%;
+      height: 70%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 10px dashed #11564b;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+
+      img {
+        width: 50%;
+        height: 50%;
+      }
+
+      .chat-tips {
+        color: #11564b;
+        font-size: 26px;
+        font-weight: bold;
       }
 
     }
