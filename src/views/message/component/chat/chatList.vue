@@ -1,8 +1,8 @@
 <template>
   <div class="list" :style="{ width: 'calc(27% + ' + listWidth + 'px' }">
-    <div class="list-item" v-for="item in listItems">
+    <div class="list-item" v-for="(item, index) in listItems" @click="chatTo(index)">
       <img :src="deleteImg" alt="" class="delete">
-      <div class="avatar-content" :class="{ 'avatar-tip': item.isRead }">
+      <div class="avatar-content" :class="{ 'avatar-tip': !item.isRead }">
         <img src="@/assets/image/avatar/avatar.jpg" alt="" class="avatar">
       </div>
       <div class="content">
@@ -20,6 +20,7 @@
 <script>
 
 import deleteImg from '@/assets/image/svg/message/delete.svg'
+import { getChatListByUsername } from '@/api/chat';
 
 export default {
   name: "chatList",
@@ -29,91 +30,23 @@ export default {
       deleteImg
     }
   },
+  methods: {
+    chatTo(index) {
+      console.log(index);
+      let username = this.listItems[index].username;
+      this.$emit('chatTo' ,username);
+    }
+  },
   props: {
     listWidth: String
   },
   created() {
-    this.listItems = [
-      {
-        headJpg: '',
-        isRead: true,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you! Fuck you!',
-        recordId: '',
-        createTime: ''
-      },
-      {
-        headJpg: '',
-        isRead: false,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you!',
-        recordId: '',
-        createTime: ''
-      },
-      {
-        headJpg: '',
-        isRead: false,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you!',
-        recordId: '',
-        createTime: ''
-      },
-      {
-        headJpg: '',
-        isRead: false,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you!',
-        recordId: '',
-        createTime: ''
-      },
-      {
-        headJpg: '',
-        isRead: true,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you!',
-        recordId: '',
-        createTime: ''
-      },
-      {
-        headJpg: '',
-        isRead: false,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you!',
-        recordId: '',
-        createTime: ''
-      },
-      {
-        headJpg: '',
-        isRead: true,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you!',
-        recordId: '',
-        createTime: ''
-      },
-      {
-        headJpg: '',
-        isRead: true,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you!',
-        recordId: '',
-        createTime: ''
-      },{
-        headJpg: '',
-        isRead: false,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you!',
-        recordId: '',
-        createTime: ''
-      },
-      {
-        headJpg: '',
-        isRead: false,
-        toUsername: 'lorem',
-        context: 'Hello, nice to meet you!',
-        recordId: '',
-        createTime: ''
-      },
-    ]
+    getChatListByUsername(this.$store.state.username).then(res => {
+      this.listItems = res;
+      console.log(res);
+    }).catch(err => {
+      console.log(err);
+    });
   }
 }
 </script>

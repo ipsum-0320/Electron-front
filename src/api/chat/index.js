@@ -13,7 +13,7 @@ export function getChatListByUsername(username) {
     return request({
         url: '/getChatListByUsername',
         method: 'get',
-        data: {
+        params: {
             username
         }
     });

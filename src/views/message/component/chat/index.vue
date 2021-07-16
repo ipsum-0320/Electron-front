@@ -1,10 +1,10 @@
 <template>
   <div class="chat">
-    <chat-list :list-width="offsetX"></chat-list>
+    <chat-list :list-width="offsetX" @chatTo="chatTo(chatToUsername)"></chat-list>
     <div class="divider" @mousedown="move" :style="{ left: 'calc(27.5% + ' + offsetX + 'px' }">
       <svg viewBox="0 0 1024 1024"><path d="M935.755 89.966a47.623 47.623 0 0 0-3.672-4.59A252.17 252.17 0 0 0 753.699 8.893c-66.385 1.148-131.794 24.73-180.622 72.352L398.021 256.818a248.096 248.096 0 0 0-72.065 180.392 258.539 258.539 0 0 0 76.54 179.875 30.213 30.213 0 0 0 3.902 3.27 68.163 68.163 0 0 0 94.73-4.475 68.278 68.278 0 0 0-2.41-95.99 123.188 123.188 0 0 1-36.55-85.721 112.229 112.229 0 0 1 32.303-81.303l174.655-175.343c22.72-21.746 52.385-34.426 83.884-32.59a116.933 116.933 0 0 1 82.852 36.836c22.95 22.721 35.918 53.13 36.549 85.778a110.909 110.909 0 0 1-31.385 80.213l-112.4 108.958a67.704 67.704 0 0 0-20.886 47.852c-0.401 18.245 6.369 35.516 19.05 48.655a68.278 68.278 0 0 0 96.507 1.836l113.376-109.417a248.9 248.9 0 0 0 72.065-180.335c-1.148-67.934-28.402-131.736-72.983-175.343z"></path><path d="M520.865 400.26a68.565 68.565 0 0 0-1.894 97.023c22.95 22.778 35.975 53.245 36.607 85.72a111.884 111.884 0 0 1-32.303 81.303L348.85 839.362a121.18 121.18 0 0 1-170.753-171.728L291.703 547.66a68.336 68.336 0 0 0-2.525-96.45 67.59 67.59 0 0 0-48.77-18.648c-18.188 0.46-35.115 8.033-47.737 21.23L80.212 572.56c-96.68 100.639-94.27 261.924 5.107 359.292a260.662 260.662 0 0 0 183.605 76.827h1.205a244.998 244.998 0 0 0 174.31-72.294l175.343-175.63a249.187 249.187 0 0 0 72.122-180.334 259.227 259.227 0 0 0-77.229-180.45 68.508 68.508 0 0 0-93.81 0.287z"></path></svg>
     </div>
-    <chat-window :window-width="offsetX"></chat-window>
+    <chat-window :window-width="offsetX" :chatToUsername="chatToUsername"></chat-window>
   </div>
 </template>
 
@@ -12,7 +12,6 @@
 
 import chatList from "@/views/message/component/chat/chatList";
 import chatWindow from "@/views/message/component/chat/chatWindow";
-import { getChatListByUsername } from '@/api/chat';
 
 export default {
   name: "chat",
@@ -22,7 +21,8 @@ export default {
   },
   data() {
     return {
-      offsetX: undefined
+      offsetX: undefined,
+      chatToUsername: undefined
     }
   },
   methods: {
@@ -36,15 +36,12 @@ export default {
         document.onmousemove = null;
         document.onmouseup = null;
       };
+    },
+    chatTo(chatToUsername) {
+      this.chatToUsername = chatToUsername;
+      console.log(chatToUsername);
     }
   },
-  created() {
-    getChatListByUsername(this.$store.state.username).then(res => {
-      console.log(res);
-    }).catch(err => {
-      console.log(err);
-    });
-  }
 }
 </script>
 
