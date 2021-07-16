@@ -3,9 +3,7 @@ export function finalOrder(data){
     return request({
         url: '/finalOrder',
         method: 'post',
-        data: {
-            data
-        }
+        data: data
     });
 }
 
@@ -13,7 +11,7 @@ export function listOrders(username){
     return request({
         url: '/listOrders',
         method: 'get',
-        data: {
+        params: {
             username
         }
     });

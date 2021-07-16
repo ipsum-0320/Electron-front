@@ -1,28 +1,34 @@
 <template>
 <div class="comment">
+  <div class="empty-cart" :class="{ 'show': comments.length === 0 }">
+    <img src="@/assets/image/svg/index/noCategory.svg" alt="">
+    <div class="tips">no comments for this product.</div>
+  </div>
   <div class="comment-items">
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item :comment-text="text"></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
-    <comment-item></comment-item>
+    <comment-item v-for="comment in comments" :comment="comment"></comment-item>
   </div>
 </div>
 </template>
 
 <script>
 import CommentItem from "@/views/product/commentItem";
+import {getCommentListByProductId} from "@/api/comment";
 export default {
   name: "comment",
   components: {CommentItem},
+  props: ['productId'],
   data() {
     return {
-      text: "的库哈斯官方巴萨的几个房间暗杀部队嘎斯空间的法术抵抗结果很快就会科技活动看价格哈库建设的规划aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      comments:[]
     }
+  },
+  created() {
+    console.log(this.productId)
+    getCommentListByProductId(this.productId, 1, 20).then((res) => {
+      this.comments = res.object
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 }
 </script>
@@ -39,6 +45,40 @@ export default {
   background-color: #D6D5B7;
   border-radius: 10px;
   border: 5px solid #11564b;
+
+  .empty-cart {
+    display: none;
+    width: 30%;
+    height: 40%;
+    border: 5px dashed #11564b;
+    border-radius: 10px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    &.show {
+      display: flex;
+    }
+
+    .tips {
+      color: #11564b;
+      position: relative;
+      top: 5%;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    img {
+      position: relative;
+      top: -5%;
+      width: 60%;
+      height: 60%;
+    }
+  }
 
   .comment-items {
     width: 90%;

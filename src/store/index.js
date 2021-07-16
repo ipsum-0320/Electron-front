@@ -8,8 +8,6 @@ export default createStore({
     username: undefined,
     webSocket: undefined,
     token: undefined,
-
-
   },
   mutations: {
     login(state, payload) {
@@ -21,7 +19,6 @@ export default createStore({
     createWebSocket(state, payload) {
       state.webSocket = new WebSocket(`ws://120.77.83.8:8083/websocket/${payload}`, [state.token]);
       state.webSocket.onmessage = (e) => {
-
       };
     },
     closeWebSocket(state) {

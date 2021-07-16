@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     router() {
-      this.$router.push('/main/category')
+      this.$router.push({path: '/main/category', query: {categoryId: this.category}})
     },
   }
 }

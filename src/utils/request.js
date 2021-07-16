@@ -7,17 +7,17 @@ const request = axios.create({
   timeout: 3000,
   validateStatus: status => status < 500
 });
-
-request.interceptors.request.use(config => {
-  if (config.url !== '/signOn') {
-    console.log('request');
-    config.headers.token = store.state.token;
-    // 如果请求的 URL 不是 signOn 的话，加上 token。
-  }
-  return config;
-}, err => {
-  return Promise.reject(err);
-});
+//
+// request.interceptors.request.use(config => {
+//   if (config.url !== '/signOn') {
+//     console.log('request');
+//     config.headers.token = store.state.token;
+//     // 如果请求的 URL 不是 signOn 的话，加上 token。
+//   }
+//   return config;
+// }, err => {
+//   return Promise.reject(err);
+// });
 
 request.interceptors.response.use(res => {
   if (res.status !== 200) {
@@ -35,9 +35,9 @@ request.interceptors.response.use(res => {
       // 后端自定义码非以 2 开头则来到这里。
       return Promise.reject(res.data.code);
     }
-    store.commit('setToken', res.headers.authorization);
-    // 设置 Token。
-    console.log('response');
+    // store.commit('setToken', res.headers.authorization);
+    // // 设置 Token。
+    // console.log('response');
     return Promise.resolve(res.data);
   }
 }, err => {

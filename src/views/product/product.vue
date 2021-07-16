@@ -6,7 +6,7 @@
         <span>Back to Category</span>
       </div>
       <div class="check-trigger">
-        <span @click="clickTrigger">Check {{checkProduct == true?"Product":"Comment"}}</span>
+        <span @click="clickTrigger">Check {{checkProduct == true?"Comment":"Product"}}</span>
       </div>
       <transition name="fade">
         <div class="product-container" v-if="checkProduct">
@@ -30,21 +30,9 @@
                 <div class="choose-item">
                   <div class="form-info-title">Item:</div>
                   <div class="choose-item-options">
-                    <div class="option-container">
-                      <input type="radio" id="option1" name="choose-item" class="real-radio">
-                      <label for="option1" class="fake-radio">Lorem ipsum dolor</label>
-                    </div>
-                    <div class="option-container">
-                      <input type="radio" id="option2" name="choose-item" class="real-radio">
-                      <label for="option2" class="fake-radio">dolor sit amet</label>
-                    </div>
-                    <div class="option-container">
-                      <input type="radio" id="option3" name="choose-item" class="real-radio">
-                      <label for="option3" class="fake-radio">consec adipic elit</label>
-                    </div>
-                    <div class="option-container">
-                      <input type="radio" id="option4" name="choose-item" class="real-radio">
-                      <label for="option4" class="fake-radio">optio quis volupt</label>
+                    <div class="option-container" v-for="item in itemList">
+                      <input ref="itemRadio" type="radio" :id="item.itemId" :key="item.itemId" name="choose-item" class="real-radio">
+                      <label :for="item.itemId" class="fake-radio">{{ item.attribute1 + item.attribute2 + item.attribute3 }}</label>
                     </div>
                   </div>
                 </div>
@@ -98,13 +86,15 @@
         <div class="cart-num-tip">{{quantityInCart}}</div>
       </div>
       <transition name="fade">
-        <comment v-if="!checkProduct"></comment>
+        <comment  v-if="!checkProduct" :product-id="productId"></comment>
       </transition>
     </div>
   </div>
 </template>
 
 <script>
+import {viewProduct} from "@/api/catalog";
+import {viewCart, addItemToCart} from "@/api/cart";
 import Comment from "@/views/product/comment";
 export default {
   name: "product",
@@ -112,7 +102,7 @@ export default {
   data() {
     return {
       quantity: 1,
-      quantityInCart: 4,
+      quantityInCart: null,
       collectionActive: false,
       addCartActive: false,
       imgs: [
@@ -123,7 +113,9 @@ export default {
       ],
       mainImgIndex: 0,
       isShow: false,
-      checkProduct: true
+      checkProduct: true,
+      productId: null,
+      itemList: null
     }
   },
   computed: {
@@ -145,6 +137,15 @@ export default {
       this.addCartActive = true
       setTimeout(() => this.addCartActive = false, 1000)
       this.quantityInCart++
+      // addItemToCart(this.$store.state.username, )
+      let items = document.getElementsByClassName('option-container')
+      for(let i = 0; i < items.length; i++) {
+        if(items[i].firstChild.checked) {
+          let itemId = items[i].firstChild.id
+          let username = this.$store.state.username
+          addItemToCart(username, itemId, this.quantity)
+        }
+      }
     },
     clickImg(index) {
       this.mainImgIndex = index
@@ -196,6 +197,20 @@ export default {
     clickTrigger() {
       this.checkProduct = !this.checkProduct
     }
+  },
+  created() {
+    this.productId = this.$route.query.productId
+    viewProduct(this.productId).then((res) => {
+      this.itemList = res.object.itemList
+    }).catch((err) => {
+      console.log(err)
+    })
+
+    viewCart(this.$store.state.username).then((res) => {
+      this.quantityInCart = res.object.cartItems.length
+    }).catch(err => {
+      console.log(err)
+    })
   }
 }
 </script>
@@ -455,6 +470,7 @@ export default {
           .choose-item {
             position: relative;
             width: 100%;
+            height: 60%;
 
             .form-info-title {
               position: absolute;
@@ -465,6 +481,7 @@ export default {
               display: inline-block;
               position: relative;
               width: 76%;
+              height: 100%;
               left: 25.1%;
 
               .option-container {

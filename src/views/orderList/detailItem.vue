@@ -1,11 +1,11 @@
 <template>
   <div class="detail-item">
     <img src="@/assets/image/petImg/cat/catImg.jpg" alt="">
-    <div class="product-name">{{ detail.productName }}</div>
-    <div class="quantity">×{{detail.quantity}}</div>
-    <div class="price">${{detail.price}}</div>
-    <div class="evaluation" @click="">
-      {{detail.hasEvaluated?"check evaluation":"evaluate"}}
+    <div class="product-name">{{ info.detail.productName }}</div>
+    <div class="quantity">×{{info.detail.quantity}}</div>
+    <div class="price">${{info.detail.price}}</div>
+    <div class="evaluation" @click="comment">
+      {{info.detail.hasEvaluated?"check comment":"comment"}}
     </div>
     <hr>
   </div>
@@ -14,7 +14,12 @@
 <script>
 export default {
   name: "detailItem",
-  props: ['detail']
+  props: ['info'],
+  methods: {
+    comment() {
+      this.$emit('write-comment',this.info)
+    }
+  }
 }
 </script>
 

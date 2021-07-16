@@ -2,9 +2,9 @@
   <div class="comment-item">
     <img src="@/assets/image/avatar/avatar.jpg" alt="">
     <div class="comment-info">
-      <div class="user-name">你爹</div>
-      <div class="comment-text">{{commentText}}</div>
-      <div class="comment-date">2021-7-12</div>
+      <div class="user-name">{{ comment.username }}</div>
+      <div class="comment-text">{{comment.context}}</div>
+      <div class="comment-date">{{ comment.createTime }}</div>
     </div>
 
   </div>
@@ -13,7 +13,7 @@
 <script>
 export default {
   name: "commentItem",
-  props:['commentText']
+  props:['comment']
 }
 </script>
 

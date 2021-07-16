@@ -53,9 +53,9 @@
               </path>
             </svg>
           </div>
-          <hr v-if="showDetail == index">
-          <div class="detail" v-if="showDetail == index">
-            <detail-item v-for="detail in item.detail" :detail="detail"></detail-item>
+          <hr v-if="showDetail === index">
+          <div class="detail" v-if="showDetail === index">
+            <detail-item v-for="detail in item.detail" :info="{detail:detail,orderId:item.orderId}" @write-comment="writeComment"></detail-item>
           </div>
         </div>
       </div>
@@ -64,19 +64,44 @@
       </div>
       <div class="total-cost">Total Cost: ${{sumPrice}}</div>
     </div>
+    <el-dialog v-model="isDialogShow" destroy-on-close>
+      <div class="dialog-title">Write Yout Comment</div>
+      <div class="dialog-rate">
+        <rate ref="star" :star="commentOn.detail.stars"></rate>
+      </div>
+      <div class="content-description">
+        <textarea :disabled="commentOn.detail.comment != null"  class="content-description-input" ref="textarea" :value="commentOn.detail.comment"/>
+      </div>
+      <div class="confirm-btn dialog-btn" @click="confirm" :class="{'has-commented-btn': commentOn.detail.hasEvaluated}">
+        <span>comment</span>
+        <svg viewBox="0 0 1024 1024"><path d="M915.515 142.82L98.213 458.2c-46.058 17.772-44.905 43.6 2.349 57.622l197.477 58.595 80.292 238.91c10.512 31.279 37.973 37.875 61.463 14.605L543.378 725.32l204.475 149.84c26.566 19.468 53.879 9.222 61.05-23.09l149.21-672.345c7.151-32.22-11.894-48.753-42.598-36.906zM791.141 294.833l-348.62 310.61c-6.268 5.586-11.941 16.653-12.812 24.847l-15.39 144.698c-1.729 16.248-7.331 16.919-12.498 1.345l-67.457-203.339c-2.64-7.954 0.976-17.705 8.022-21.93L784.5 285.882c28.174-16.898 31.173-12.907 6.64 8.951z"></path></svg>
+      </div>
+      <div class="cancel-btn dialog-btn" @click="cancel">
+        <span>Cancel</span>
+        <svg viewBox="0 0 1024 1024"><path d="M693.527273 512l311.854545-311.854545c18.618182-18.618182 18.618182-55.854545 0-79.127273L902.981818 18.618182C884.363636 0 847.127273 0 823.854545 18.618182L512 330.472727 200.145455 13.963636C176.872727-4.654545 139.636364-4.654545 121.018182 13.963636L13.963636 121.018182c-18.618182 18.618182-18.618182 55.854545 0 79.127273L330.472727 512 18.618182 823.854545c-18.618182 18.618182-18.618182 55.854545 0 79.127273l102.4 102.4c18.618182 18.618182 55.854545 18.618182 79.127273 0l311.854545-311.854545 311.854545 311.854545c18.618182 18.618182 55.854545 18.618182 79.127273 0l102.4-102.4c18.618182-18.618182 18.618182-55.854545 0-79.127273L693.527273 512z"></path></svg>
+      </div>
+    </el-dialog>
   </div>
+
 </template>
 
 <script>
 import DetailItem from "@/views/orderList/detailItem";
+import {listOrders} from "@/api/order";
+import { ElDialog } from 'element-plus';
+import { ElRate } from 'element-plus'
+import Rate from "@/views/orderList/rate";
 export default {
   name: "orderList",
-  components: {DetailItem},
+  components: {Rate, DetailItem,ElDialog,ElRate},
   data() {
     return {
       isDelete:-1,
       toDelete:-1,
       showDetail:-1,
+      isDialogShow:false,
+      commentOn: null,
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
       listItems: [
         {
           orderId: '#1001',
@@ -84,16 +109,20 @@ export default {
           totalPrice: 240,
           detail: [
             {
-              productName: 'NB',
+              productName: 'NB1',
               quantity: 4,
               price: 25,
-              hasEvaluated: true
+              hasEvaluated: true,
+              comment: "哇哇哇哇 帧好啊，哈哈哈哈哈哈哈",
+              stars:4
             },
             {
-              productName: 'NB',
+              productName: 'NB2',
               quantity: 4,
               price: 25,
-              hasEvaluated: false
+              hasEvaluated: true,
+              comment: "哇哇哇哇哈哈",
+              stars:1
             }
           ]
         },
@@ -103,10 +132,12 @@ export default {
           totalPrice: 240,
           detail: [
             {
-              productName: 'NB',
+              productName: 'NB3',
               quantity: 4,
               price: 25,
-              hasEvaluated: true
+              hasEvaluated: false,
+              comment: null,
+              stars: 0
             }
           ]
         },
@@ -116,16 +147,20 @@ export default {
           totalPrice: 240,
           detail: [
             {
-              productName: 'NB',
+              productName: 'NB4',
               quantity: 4,
               price: 25,
-              hasEvaluated: true
+              hasEvaluated: false,
+              comment: null,
+              stars: 0
             },
             {
-              productName: 'NB',
+              productName: 'NB5',
               quantity: 4,
               price: 25,
-              hasEvaluated: true
+              hasEvaluated: false,
+              comment: null,
+              stars: 0
             }
           ]
         }
@@ -155,12 +190,45 @@ export default {
       },1000)
     },
     clickDetail(index) {
+      this.isDelete = -1
       if(this.showDetail === index) {
         this.showDetail = -1
       }else {
         this.showDetail = index
       }
+    },
+    writeComment(comment) {
+      this.isDialogShow = true
+      this.commentOn = comment
+    },
+    confirm() {
+      this.isDialogShow = false
+      let comment = this.$refs.textarea.value
+      let star = this.$refs.star.isShow
+      let orderId = this.commentOn.orderId
+      let productName = this.commentOn.detail.productName
+      for(let i = 0; i < this.listItems.length; i++) {
+        if(this.listItems[i].orderId === orderId) {
+          for(let j = 0; j < this.listItems[i].detail.length; j++) {
+            if(this.listItems[i].detail[j].productName === productName) {
+              this.listItems[i].detail[j].hasEvaluated = true
+              this.listItems[i].detail[j].comment = comment
+              this.listItems[i].detail[j].stars = star
+            }
+          }
+        }
+      }
+    },
+    cancel() {
+      this.isDialogShow = false
     }
+  },
+  created() {
+    listOrders(this.$store.state.username).then(data => {
+      console.log(data)
+    }).catch(err => {
+      console.log(err)
+    })
   }
 }
 </script>
@@ -168,6 +236,7 @@ export default {
 <style scoped lang="scss">
 body {
   background-color: #A0EEE1;
+
 }
 
 .order-list-content {
@@ -539,6 +608,136 @@ body {
 
   }
 
+  & /deep/ .el-overlay .el-dialog{
+    background-color: #D6D5B7;
+    border-radius: 10px;
+    border: 5px solid #11564b;
+    height: 75%;
+
+    .dialog-title {
+      font-weight: bold;
+      font-size: 30px;
+      color: #11564b;
+      position: absolute;
+      top: 10%;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+
+    .dialog-rate {
+      width: 65%;
+      position: absolute;
+      top:25%;
+      left:50%;
+      transform:translateX(-50%);
+    }
+
+    .content-title {
+      position: absolute;
+      left: 50%;
+      top: 25%;
+      transform: translate(-50%, 0);
+      width: 80%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .content-description {
+      position: absolute;
+      left: 50%;
+      top: 40%;
+      transform: translate(-50%, 0);
+      width: 80%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .content-description-input {
+        all: unset;
+        border-radius: 10px;
+        border: 3px #11564b solid;
+        width: 400px;
+        height: 190px;
+        letter-spacing: 2px;
+        color: #11564b;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 10px;
+      }
+
+    }
+
+    .dialog-btn {
+      border: 3px #11564b solid;
+      border-radius: 10px;
+      width: 150px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: absolute;
+      bottom: 30px;
+      cursor: pointer;
+      transition: background-color .5s;
+
+      span {
+        color: #11564b;
+        font-size: 18px;
+        font-weight: bold;
+        margin-right: 5px;
+        transition: color .5s;
+      }
+
+      svg {
+        fill: #11564b;
+        transition: fill .5s;
+      }
+
+      &:hover {
+        background-color: #11564b;
+        span {
+          color: #D6D5B7;
+        }
+        svg {
+          fill: #D6D5B7;
+        }
+      }
+
+    }
+
+    .has-commented-btn {
+      background-color: grey;
+
+      &:hover {
+        background-color: grey;
+        span {
+          color: #11564b;
+        }
+        svg {
+          fill: #11564b;
+        }
+      }
+    }
+
+    .confirm-btn {
+      left: 20%;
+      svg {
+        width: 25%;
+      }
+    }
+
+    .cancel-btn {
+      right: 20%;
+      span {
+        margin-right: 10px;
+      }
+      svg {
+        width: 15%;
+      }
+    }
+
+  }
 }
 
 </style>
