@@ -116,7 +116,6 @@ export default {
       if (this.chatToUserInfo === undefined || this.$store.state.webSocketData.username !== this.chatToUserInfo.toUsername) {
         // 没有打开页面或者发送方和我当前正在聊天的对象不一致。
 
-
         // vuex 中的数据是响应式的，不能够直接传出去。
         // 但是 JS 中如果对象仍旧被变量所引用，那么内存是不会被回收的。
         this.$emit('receiveData', this.$store.state.webSocketData);

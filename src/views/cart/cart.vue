@@ -6,10 +6,9 @@
           <img src="@/assets/image/svg/index/noCategory.svg" alt="">
           <div class="tips">Sorry, Your cart is empty.</div>
         </div>
-
-
         <div class="cart-items">
-          <cart-item v-for="(cartItem, index) in cart.object.cartItems" :cartItem="cartItem" :index="index" @sub="subItem(index)" @add="addItem(index)" @deleteItem="deleteItem(index)" :key="cartItem.item.product.productId" :class="{ 'delete-cart-item': isItemDeleting[index] }"></cart-item>
+          <cart-item v-if="cart !== null" v-for="(cartItem, index) in cart.cartItems" :cartItem="cartItem" :index="index" @sub="subItem(index)" @add="addItem(index)" @deleteItem="deleteItem(index)" :key="cartItem.item.product.productId" :class="{ 'delete-cart-item': isItemDeleting[index] }"></cart-item>
+          <!-- 请求时间太长，导致页面渲染速度快于拿到回调数据的速度 -->
         </div>
       </div>
       <div class="delete" @click="deleteItems">
@@ -50,32 +49,32 @@ export default {
   },
   methods:{
     subItem(index) {
-      console.log(this.cart.object.cartItems[index].quantity);
+      console.log(this.cart.cartItems[index].quantity);
     },
     addItem(index) {
-      console.log(this.cart.object.cartItems[index].quantity);
+      console.log(this.cart.cartItems[index].quantity);
     },
     deleteItems() {
       let checked_items = document.querySelectorAll('[type="checkbox"]:checked');
       for (let i = 0; i < checked_items.length; i++) {
         let index = checked_items[i].parentNode.getAttribute('index');
         this.isItemDeleting[index] = true;
-        let id = this.cart.object.cartItems[index].item.product.productId;
+        let id = this.cart.cartItems[index].item.product.productId;
         setTimeout(() => {
-          for (let i = 0; i < this.cart.object.cartItems.length; i++) {
-            if (this.cart.object.cartItems[i].item.product.productId === id) {
+          for (let i = 0; i < this.cart.cartItems.length; i++) {
+            if (this.cart.cartItems[i].item.product.productId === id) {
               this.isItemDeleting[i] = false;
-              this.cart.object.cartItems.splice(i, 1);
+              this.cart.cartItems.splice(i, 1);
               this.isItemDeleting.splice(0, 1);
-              this.isEmptyShow = this.cart.object.cartItems.length === 0;
+              this.isEmptyShow = this.cart.cartItems.length === 0;
             }
           }
         }, 1000);
       }
     },
     deleteItem(index) {
-      this.cart.object.cartItems.splice(index, 1);
-      this.isEmptyShow = this.cart.object.cartItems.length === 0;
+      this.cart.cartItems.splice(index, 1);
+      this.isEmptyShow = this.cart.cartItems.length === 0;
     },
     route() {
       this.$router.push('/main/order')
@@ -83,28 +82,41 @@ export default {
   },
   computed: {
     subTotal() {
+      if (this.cart === null) return;
       let total = 0;
-      for (let i = 0; i < this.cart.object.cartItems.length; i++) {
-        total += this.cart.object.cartItems[i].item.listPrice * this.cart.object.cartItems[i].quantity;
+      for (let i = 0; i < this.cart.cartItems.length; i++) {
+        total += this.cart.cartItems[i].item.listPrice * this.cart.cartItems[i].quantity;
       }
       return total;
     }
   },
-  async created() {
-    try {
-      let res = await viewCart(this.$store.state.username);
+  // async created() {
+  //   try {
+  //     console.log('log');
+  //     let res = await viewCart(this.$store.state.username);
+  //     console.log(res);
+  //     this.cart = res;
+  //     let length = this.cart.cartItems.length;
+  //     this.isEmptyShow = length === 0;
+  //     this.isItemDeleting = new Array(length);
+  //     console.log(this.isItemDeleting);
+  //   } catch (e) {
+  //     console.log(e)
+  //   }
+  // }
+  created() {
+    viewCart(this.$store.state.username).then(res => {
+      console.log(this.cart);
       this.cart = res;
-      let length = this.cart.object.cartItems.length
+      console.log(this.cart);
+      let length = this.cart.cartItems.length;
       this.isEmptyShow = length === 0;
       this.isItemDeleting = new Array(length);
-      for (let i = 0; i < this.isItemDeleting.length; i++) {
-        this.isItemDeleting[i] = false;
-      }
-      console.log(this.isItemDeleting);
-    } catch (e) {
-      console.log(e)
-    }
+    }).catch(err => {
+      console.log(err);
+    });
   }
+
 }
 </script>
 

@@ -5,7 +5,7 @@ import {getCookie} from "@/utils/cookie";
 
 export default createStore({
   state: {
-    isLogin: true,
+    isLogin: false,
     username: undefined,
     avatarURL: undefined,
     webSocket: undefined,
@@ -36,6 +36,9 @@ export default createStore({
     },
     setAvatarURL(state, payload) {
       state.avatarURL = payload;
+    },
+    setWebSocketData(state, payload) {
+      state.webSocketData = payload;
     }
   },
   actions: {
