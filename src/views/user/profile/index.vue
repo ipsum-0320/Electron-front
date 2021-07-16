@@ -1,5 +1,9 @@
 <template>
-  <h2>Profile</h2>
+  <div class="profile-container">
+
+
+
+  </div>
 </template>
 
 <script>
@@ -8,6 +12,19 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
+.profile-container {
+  width: 100vw;
+  height: 88vh;
+  background-color: #A0EEE1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+
+
+
+}
 
 </style>

@@ -3,7 +3,7 @@ export function viewBrowseLog(username) {
     return request({
         url: '/viewBrowseLogs',
         method: 'get',
-        data: {
+        params: {
             username
         }
     });
@@ -13,8 +13,6 @@ export function removeBrowseLog(data) {
     return request({
         url: '/removeBrowseLog',
         method: 'post',
-        data: {
-            data
-        }
+        data: data
     });
 }

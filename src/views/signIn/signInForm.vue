@@ -129,6 +129,7 @@
 <script>
 import { login } from "@/api/login";
 import { ElMessage  } from "element-plus";
+import { getAvatar } from "@/api/user";
 
 export default {
   name: "signInForm",
@@ -175,6 +176,8 @@ export default {
           this.$store.commit('setIsLogin', true);
           this.$store.commit('login', this.username);
           this.$store.commit('createWebSocket', this.username);
+          const avatarURL = await getAvatar(this.username);
+          this.$store.commit('setAvatarURL', avatarURL);
         }
         setTimeout(() => {
           document.querySelector('.login-form .waiting').style['opacity'] = '0';

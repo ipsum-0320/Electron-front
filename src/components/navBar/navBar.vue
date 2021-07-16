@@ -76,9 +76,9 @@
       </div>
     </div>
     <div class="avatar">
-      <img src="@/assets/image/avatar/avatar.jpg" alt="">
+      <img :src="$store.state.avatarURL" alt="">
       <div class="profile">
-        <div class="profile-name">lorem ipsum.</div>
+        <div class="profile-name"> {{ $store.state.username }} </div>
         <div class="divide-line"></div>
         <div class="profile-group">
           <div class="profile-option" @click="router('/main/user/profile')">

@@ -3,11 +3,12 @@
     <div class="list-item" v-for="(item, index) in listItems" @click="chatTo(index)">
       <img :src="deleteImg" alt="" class="delete">
       <div class="avatar-content" :class="{ 'avatar-tip': !item.isRead }">
-        <img src="@/assets/image/avatar/avatar.jpg" alt="" class="avatar">
+        <img :src="avatars[index]" alt="" class="avatar">
       </div>
       <div class="content">
         <div class="name">
-          {{ item.toUsername }}
+          {{ item.toUsername === $store.state.username ? item.username : item.toUsername }}
+          <!-- listItems中的数据来自于最新的一个数据结构 -->
         </div>
         <div class="quick-message">
           {{ item.context }}
@@ -20,33 +21,59 @@
 <script>
 
 import deleteImg from '@/assets/image/svg/message/delete.svg'
-import { getChatListByUsername } from '@/api/chat';
+import {getChatListByUsername} from '@/api/chat';
+import {getAvatar} from "@/api/user";
+import {readMessage} from "@/api/chat";
 
 export default {
   name: "chatList",
   data() {
     return {
-      listItems: null,
-      deleteImg
+      listItems: [],
+      deleteImg,
+      avatars: []
     }
   },
   methods: {
     chatTo(index) {
-      console.log(index);
-      let username = this.listItems[index].username;
-      this.$emit('chatTo' ,username);
-    }
+      readMessage(this.$store.state.username).then(res => {
+        this.listItems[index].isRead = true;
+        this.$emit('chatTo' ,{
+          toUsername: this.listItems[index].toUsername === this.$store.state.username ? this.listItems[index].username : this.listItems[index].toUsername,
+          avatarURL: this.avatars[index]
+        });
+      }).catch(err => {
+        console.log(err);
+      });
+    },
   },
   props: {
-    listWidth: String
+    listWidth: String,
+    webSocketData: Object
   },
-  created() {
-    getChatListByUsername(this.$store.state.username).then(res => {
-      this.listItems = res;
-      console.log(res);
-    }).catch(err => {
-      console.log(err);
-    });
+  watch: {
+    webSocketData: function (newVal, oldVal) {
+      for (let i = 0; i < this.listItems.length; i++) {
+        let toUsername = this.listItems[i].toUsername === this.$store.state.username ? this.listItems[i].username : this.listItems[i].toUsername;
+        if (toUsername === newVal.username) {
+          this.listItems[i].context = newVal.context;
+          this.listItems[i].isRead = newVal.isRead;
+          return;
+        }
+      }
+    }
+  },
+  async created() {
+    try {
+      this.listItems = await getChatListByUsername(this.$store.state.username);
+      for (let listItem of this.listItems) {
+        let avatarURL = await getAvatar(listItem.toUsername === this.$store.state.username ? listItem.username : listItem.toUsername);
+        this.avatars.push(avatarURL);
+        // await 居然会阻塞 for 循环。
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 }
 </script>

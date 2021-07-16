@@ -1,19 +1,19 @@
 import axios from "axios";
 import { ElMessage  } from "element-plus";
 import store from '../store';
-import {setCookie, getCookie} from "@/utils/cookie";
+// import {setCookie, getCookie} from "@/utils/cookie";
 
 const request = axios.create({
   baseURL: '/api',
-  timeout: 3000,
+  timeout: 5000,
   validateStatus: status => status < 500
 });
 
 request.interceptors.request.use(config => {
   if (config.url !== '/signOn') {
     // console.log('request');
-    // config.headers.token = store.state.token;
-    config.headers.token = getCookie('token');
+    config.headers.token = store.state.token;
+    // config.headers.token = getCookie('token');
     // 如果请求的 URL 不是 signOn 的话，加上 token。
   }
   return config;
@@ -37,8 +37,8 @@ request.interceptors.response.use(res => {
       // 后端自定义码非以 2 开头则来到这里。
       return Promise.reject(res.data.code);
     }
-    setCookie('token', res.headers.authorization);
-    // store.commit('setToken', res.headers.authorization);
+    // setCookie('token', res.headers.authorization, 1);
+    store.commit('setToken', res.headers.authorization);
     // 设置 Token。
     // console.log('response');
     return Promise.resolve(res.data.object);

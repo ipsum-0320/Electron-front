@@ -1,36 +1,16 @@
 <template>
   <div class="window" :style="{ width: 'calc(68.5% - ' + windowWidth + 'px' }">
-    <div class="chat-window" v-if="chatToUsername !== undefined">
-      <div class="chat-message-item">
-        <img src="@/assets/image/avatar/avatar.jpg" alt="" class="chat-avatar">
+    <div class="chat-window" v-if="chatToUserInfo !== undefined">
+      <div class="chat-message-item" v-for="item in chatMessageItems" :class="{ 'my-message': $store.state.username ===  item.username }">
+        <img :src="$store.state.avatarURL" alt="" class="chat-avatar" v-if="$store.state.username ===  item.username">
+        <img v-else :src="chatToUserInfo.avatarURL" alt="" class="chat-avatar">
         <div class="chat-bubble">
           <div class="chat-bubble-tips"></div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad corporis culpa cupiditate dolor fugit harum ipsum iste laboriosam nam natus optio, quas quisquam quo quos sequi, sint soluta ullam vel veniam. Consectetur, ea, eveniet excepturi exercitationem, labore libero minima mollitia officia possimus quaerat quidem quisquam quos reiciendis sed voluptatum.
-        </div>
-      </div>
-      <div class="chat-message-item">
-        <img src="@/assets/image/avatar/avatar.jpg" alt="" class="chat-avatar">
-        <div class="chat-bubble">
-          <div class="chat-bubble-tips"></div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad corporis culpa cupiditate dolor fugit harum ipsum iste laboriosam nam natus optio, quas quisquam quo quos sequi, sint soluta ullam vel veniam. Consectetur, ea, eveniet excepturi exercitationem, labore libero minima mollitia officia possimus quaerat quidem quisquam quos reiciendis sed voluptatum.
-        </div>
-      </div>
-      <div class="chat-message-item">
-        <img src="@/assets/image/avatar/avatar.jpg" alt="" class="chat-avatar">
-        <div class="chat-bubble">
-          <div class="chat-bubble-tips"></div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad corporis culpa cupiditate dolor fugit harum ipsum iste laboriosam nam natus optio, quas quisquam quo quos sequi, sint soluta ullam vel veniam. Consectetur, ea, eveniet excepturi exercitationem, labore libero minima mollitia officia possimus quaerat quidem quisquam quos reiciendis sed voluptatum.
-        </div>
-      </div>
-      <div class="chat-message-item">
-        <img src="@/assets/image/avatar/avatar.jpg" alt="" class="chat-avatar">
-        <div class="chat-bubble">
-          <div class="chat-bubble-tips"></div>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus ad corporis culpa cupiditate dolor fugit harum ipsum iste laboriosam nam natus optio, quas quisquam quo quos sequi, sint soluta ullam vel veniam. Consectetur, ea, eveniet excepturi exercitationem, labore libero minima mollitia officia possimus quaerat quidem quisquam quos reiciendis sed voluptatum.
+          {{ item.context }}
         </div>
       </div>
     </div>
-    <div class="enterArea" v-if="chatToUsername !== undefined">
+    <div class="enterArea" v-if="chatToUserInfo !== undefined">
       <div class="expression" tabindex="-1">
         <div class="expression-content">
           <div class="main-content">
@@ -66,11 +46,14 @@
 
 <script>
 
+import { getChatListByUserAndToUser } from '@/api/chat';
+import { makeChat } from "@/api/chat";
+
 export default {
   name: "chatWindow",
   props: {
     windowWidth: String,
-    chatToUsername: String,
+    chatToUserInfo: String,
   },
   data() {
     return {
@@ -85,7 +68,22 @@ export default {
       ],
       message: '',
       limit: 300,
-      messageItems: null
+      messageItems: null,
+      chatMessageItems: null,
+      window: null
+    }
+  },
+  watch: {
+    chatToUserInfo: function (newVal, oldVal) {
+      getChatListByUserAndToUser(this.$store.state.username, this.chatToUserInfo.toUsername, 1, 20).then(res => {
+        this.chatMessageItems = res.reverse();
+        this.window = document.querySelector('.chat-window');
+        setTimeout(() => {
+          this.window.scrollTop = this.window.scrollHeight;
+        }, 0);
+      }).catch(err => {
+        console.log(err);
+      });
     }
   },
   methods: {
@@ -94,10 +92,42 @@ export default {
     },
     send() {
       let messagePackage = {
-        username: '',
-        toUsername: '',
+        username: this.$store.state.username,
+        toUsername: this.chatToUserInfo.toUsername,
+        context: this.message,
       }
+      makeChat(messagePackage).then(res => {
+        this.chatMessageItems.push({
+          username: this.$store.state.username,
+          toUsername: this.chatToUserInfo.toUsername,
+          context: this.message
+        });
+        this.message = '';
+        setTimeout(() => {
+          this.window.scrollTop = this.window.scrollHeight;
+        }, 0);
+      }).catch(err => {
+        console.log(err);
+      });
     }
+  },
+  mounted() {
+    this.$store.watch((state, getters) => state.webSocketData, () => {
+      if (this.chatToUserInfo === undefined || this.$store.state.webSocketData.username !== this.chatToUserInfo.toUsername) {
+        // 没有打开页面或者发送方和我当前正在聊天的对象不一致。
+
+
+        // vuex 中的数据是响应式的，不能够直接传出去。
+        // 但是 JS 中如果对象仍旧被变量所引用，那么内存是不会被回收的。
+        this.$emit('receiveData', this.$store.state.webSocketData);
+        return;
+      }
+      // 会出现两种可能的BUG
+      this.chatMessageItems.push(this.$store.state.webSocketData);
+      setTimeout(() => {
+        this.window.scrollTop = this.window.scrollHeight;
+      }, 0);
+    });
   }
 }
 </script>
@@ -152,6 +182,28 @@ export default {
             border-right: 10px solid #11564b;
             border-bottom: 10px solid transparent;
           } // 这种方法对伪元素制作三角形无效。
+
+        }
+
+        &.my-message {
+          flex-direction: row-reverse;
+
+          .chat-bubble {
+            left: -17px;
+
+            .chat-bubble-tips {
+              all: unset;
+              transform: rotate(180deg);
+              position: absolute;
+              right: -13px;
+              width: 0;
+              height: 0;
+              border-top: 10px solid transparent;
+              border-right: 10px solid #11564b;
+              border-bottom: 10px solid transparent;
+            }
+
+          }
 
         }
 

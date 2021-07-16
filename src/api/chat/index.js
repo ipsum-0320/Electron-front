@@ -1,11 +1,9 @@
 import request from "@/utils/request";
-export function makeChat(data) {
+export function makeChat(messagePackage) {
     return request({
         url: '/makeChat',
         method: 'post',
-        data:{
-            data
-        }
+        data: messagePackage
     });
 }
 
@@ -23,7 +21,7 @@ export function getChatListByUserAndToUser(username,toUsername,pageNum,pageSize)
     return request({
         url: '/getChatListByUserAndToUser',
         method: 'get',
-        data: {
+        params: {
             username,
             toUsername,
             pageNum,
@@ -34,9 +32,9 @@ export function getChatListByUserAndToUser(username,toUsername,pageNum,pageSize)
 
 export function readMessage(username) {
     return request({
-        url: 'deleteMessage',
+        url: '/deleteMessage',
         method: 'get',
-        data: {
+        params: {
             username
         }
     });

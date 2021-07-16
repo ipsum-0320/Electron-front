@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      categories: ['FISH', 'BIRD', 'DOG', 'CAT', 'REPTILE'],
+      categories: ['IPHONE', 'SAMSUNG', 'DOG', 'CAT', 'REPTILE'],
       contentWidth: undefined,
       containerWidth: undefined,
       contentOffset: undefined,
