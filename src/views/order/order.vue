@@ -34,19 +34,19 @@
       </div>
     </div>
     <transition :duration="{enter:1000, leave:1000}" name="fade">
-      <select-address @switch-step="switchStep" ref="selectAddress" v-if="activeStep == 1"></select-address>
+      <select-address @switch-step="switchStep" ref="selectAddress" v-if="activeStep === 1"></select-address>
     </transition>
 
     <transition :duration="1000" name="fade">
-      <confirm-order @switch-previous="switchStep" @switch-next="switchStep" v-if="activeStep == 2"></confirm-order>
+      <confirm-order @switch-previous="switchStep" @switch-next="switchStep" v-if="activeStep === 2"></confirm-order>
     </transition>
 
     <transition :duration="1000" name="fade">
-      <payment @switch-previous="switchStep" @switch-next="switchStep" v-if="activeStep == 3"></payment>
+      <payment @switch-previous="switchStep" @switch-next="switchStep" v-if="activeStep === 3"></payment>
     </transition>
 
     <transition :duration="1000" name="fade">
-      <complete v-if="activeStep == 4"></complete>
+      <complete v-if="activeStep === 4"></complete>
     </transition>
   </div>
 </template>

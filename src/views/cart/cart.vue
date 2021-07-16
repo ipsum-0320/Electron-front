@@ -2,10 +2,12 @@
   <div class="cart-content">
     <div class="cart">
       <div class="cart-main-content">
-        <div class="empty-cart" :class="{ 'show': isEmptyShow }">
+        <div class="empty-cart">
           <img src="@/assets/image/svg/index/noCategory.svg" alt="">
           <div class="tips">Sorry, Your cart is empty.</div>
         </div>
+
+
         <div class="cart-items">
           <cart-item v-for="(cartItem, index) in cart.object.cartItems" :cartItem="cartItem" :index="index" @sub="subItem(index)" @add="addItem(index)" @deleteItem="deleteItem(index)" :key="cartItem.item.product.productId" :class="{ 'delete-cart-item': isItemDeleting[index] }"></cart-item>
         </div>
@@ -25,13 +27,13 @@
       </div>
       <div class="have-selected">You have selected&nbsp;<span></span>&nbsp;items.</div>
       <div class="sub-total">Sub Total: ${{subTotal}}</div>
-      <div class="payment">Payment</div>
+      <div class="payment" @click="route()">Payment</div>
     </div>
   </div>
 </template>
 
 <script>
-
+import {viewCart} from "@/api/cart";
 import cartItem from "@/views/cart/cartItem";
 
 export default {
@@ -39,8 +41,8 @@ export default {
   data () {
     return {
       cart: null,
-      isItemDeleting: null,
-      isEmptyShow: undefined
+      isItemDeleting: [],
+      isEmptyShow: null
     }
   },
   components: {
@@ -74,6 +76,9 @@ export default {
     deleteItem(index) {
       this.cart.object.cartItems.splice(index, 1);
       this.isEmptyShow = this.cart.object.cartItems.length === 0;
+    },
+    route() {
+      this.$router.push('/main/order')
     }
   },
   computed: {
@@ -85,99 +90,28 @@ export default {
       return total;
     }
   },
-  created() {
-    this.cart= {
-      object:{
-        subTotal:55.5,
-        cartItems:[
-          {
-            item:{
-              itemId:'EST-13',
-              productId:null,
-              listPrice:18.5,
-              unitCost:null,
-              attribute1:'Green Adult',
-              attribute2:'白',
-              attribute3:'雄',
-              attribute4:null,
-              attribute5:null,
-              product:{
-                productId: 'RP-LI-01',
-                categoryId:'REPTILES',
-                name:'1',
-                description:'Friendly green friend',
-                picture:null,
-                publishStatus:1
-              },
-              quantity:9999
-            },
-            quantity: 2,
-            inStock:true,
-            total:37
-          },
-          {
-            item:{
-              itemId:'EST-13',
-              productId:null,
-              listPrice:19.5,
-              unitCost:null,
-              attribute1:'Green Adult',
-              attribute2:'白',
-              attribute3:'雄',
-              attribute4:null,
-              attribute5:null,
-              product:{
-                productId: 'RP-LI-02',
-                categoryId:'REPTILES',
-                name:'2',
-                description:'Friendly green friend',
-                picture:null,
-                publishStatus:1
-              },
-              quantity:9999
-            },
-            quantity: 2,
-            inStock:true,
-            total:37
-          },
-          {
-            item:{
-              itemId:'EST-13',
-              productId:null,
-              listPrice:20.5,
-              unitCost:null,
-              attribute1:'Green Adult',
-              attribute2:'白',
-              attribute3:'雄',
-              attribute4:null,
-              attribute5:null,
-              product:{
-                productId: 'RP-LI-03',
-                categoryId:'REPTILES',
-                name:'3',
-                description:'Friendly green friend',
-                picture:null,
-                publishStatus:1
-              },
-              quantity:9999
-            },
-            quantity: 2,
-            inStock:true,
-            total:37
-          }
-        ]
+  async created() {
+    try {
+      let res = await viewCart(this.$store.state.username);
+      this.cart = res;
+      let length = this.cart.object.cartItems.length
+      this.isEmptyShow = length === 0;
+      this.isItemDeleting = new Array(length);
+      for (let i = 0; i < this.isItemDeleting.length; i++) {
+        this.isItemDeleting[i] = false;
       }
+      console.log(this.isItemDeleting);
+    } catch (e) {
+      console.log(e)
     }
-    this.isItemDeleting = new Array(this.cart.object.cartItems.length);
-    for (let i = 0; i < this.isItemDeleting.length; i++) {
-      this.isItemDeleting[i] = false;
-    }
-    this.isEmptyShow = this.cart.object.cartItems.length === 0;
   }
 }
 </script>
 
 <style scoped lang="scss">
+[v-cloak] {
+  display: none;
+}
 .cart-content {
   position: relative;
   width: 100vw;

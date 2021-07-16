@@ -3,7 +3,7 @@ export function viewCategory(categoryId) {
     return request({
         url: '/catalog/viewCategory',
         method: 'get',
-        data: {
+        params: {
             categoryId
         }
     });
@@ -13,7 +13,7 @@ export function viewProduct(productId) {
     return request({
         url: '/catalog/viewProduct',
         method: 'get',
-        data: {
+        params: {
             productId
         }
     });
@@ -23,7 +23,7 @@ export function viewItem(itemId,username) {
     return request({
         url: '/catalog/viewItem',
         method: 'get',
-        data:{
+        params:{
             itemId,
             username
         }

@@ -11,9 +11,9 @@
       <div class="category-content" >
         <div class="products">
           <div class="products-content" :style="{width:productWidth}">
-            <div class="product" v-for="product in products" ref="product" @click="router('/main/product')">
+            <div class="product" v-for="product in products" ref="product" @click="router('/main/product',product.productId)">
               <div class="mask">
-                <img src="@/assets/image/svg/category/collection.svg" alt="" v-if="product.isCollected">
+                <img src="@/assets/image/svg/category/collection.svg" alt="" v-if="false">
                 <img src="@/assets/image/svg/category/uncollection.svg" alt="" v-else>
                 <div class="product-title">
                   <div>{{ product.name }}</div><br>
@@ -32,64 +32,29 @@
 </template>
 
 <script>
+import {viewCategory} from "@/api/catalog/index"
 export default {
   name: "category",
   data() {
     return {
-      products:[
-        {
-          isCollected: false,
-          name: 'BullDog',
-          productId: '---K9-BD-01',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.\n' +
-              '              Ab blanditiis deserunt eveniet iure maxime perspiciatis quae\n' +
-              '              voluptas voluptatibus. Blanditiis, quos.'
-        },
-        {
-          isCollected: false,
-          name: 'BullDog',
-          productId: '---K9-BD-01',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.\n' +
-              '              Ab blanditiis deserunt eveniet iure maxime perspiciatis quae\n' +
-              '              voluptas voluptatibus. Blanditiis, quos.'
-        },
-        {
-          isCollected: false,
-          name: 'BullDog',
-          productId: '---K9-BD-01',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.\n' +
-              '              Ab blanditiis deserunt eveniet iure maxime perspiciatis quae\n' +
-              '              voluptas voluptatibus. Blanditiis, quos.'
-        },
-        {
-          isCollected: false,
-          name: 'BullDog',
-          productId: '---K9-BD-01',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.\n' +
-              '              Ab blanditiis deserunt eveniet iure maxime perspiciatis quae\n' +
-              '              voluptas voluptatibus. Blanditiis, quos.'
-        },
-        {
-          isCollected: false,
-          name: 'BullDog',
-          productId: '---K9-BD-01',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit.\n' +
-              '              Ab blanditiis deserunt eveniet iure maxime perspiciatis quae\n' +
-              '              voluptas voluptatibus. Blanditiis, quos.'
-        }
-      ]
-    }
-  },
-  computed: {
-    productWidth() {
-      let len = this.products.length
-      return (60 * (len - 1) + 325 * len) + 'px'
+      products:null,
+      productWidth:null
     }
   },
   methods: {
-    router(route) {
-      this.$router.push(route)
+    router(route,productId) {
+      this.$router.push({path:route,query: {productId:productId}})
     }
+  },
+  created() {
+    console.log(this.$route.query.categoryId)
+    viewCategory(this.$route.query.categoryId).then((data) => {
+      this.products = data.object.productList
+      let len = this.products.length
+      this.productWidth = (60 * (len - 1) + 325 * len) + 'px'
+    }).catch((err) => {
+      console.log(err)
+    })
   }
 }
 </script>

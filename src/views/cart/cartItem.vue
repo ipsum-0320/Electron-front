@@ -8,7 +8,7 @@
       <img src="@/assets/image/petImg/dog/dogImg1.jpg" alt="">
     </div>
     <div class="productId">{{cartItem.item.product.name}}</div>
-    <div class="description">{{cartItem.item.product.description}}</div>
+    <div class="description">{{cartItem.item.attribute1 + cartItem.item.attribute2 + cartItem.item.attribute3}}</div>
     <div class="product-price">${{cartItem.item.listPrice}}<span>×</span></div>
     <div class="cart-quantity-content">
       <div class="minus-btn" :class="{'negative': isMinusNegative}" @click="subItem()"><span>－</span></div>
@@ -83,7 +83,7 @@ export default {
     width: 90%;
     height: 30%;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     border-radius: 10px;
     margin-top: 40px;

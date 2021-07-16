@@ -1,7 +1,7 @@
 import { createStore } from 'vuex';
 import router from '../router'
 // store 中的数据存储在内存中。
-// import {getCookie} from "@/utils/cookie";
+import {getCookie} from "@/utils/cookie";
 
 export default createStore({
   state: {

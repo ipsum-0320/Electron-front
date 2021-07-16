@@ -3,7 +3,7 @@ export function viewCart(username) {
     return request({
         url: '/viewCart',
         method: 'get',
-        data: {
+        params: {
             username
         }
     });

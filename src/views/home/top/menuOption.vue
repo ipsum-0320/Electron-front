@@ -38,7 +38,9 @@ export default {
         });
       } else if (route === 'Profile') {
         this.$router.push('/main/user/profile');
-      } else {
+      } else if (route === 'Cart') {
+        this.$router.push('/main/cart')
+      }else {
         this.$router.push(`/main/${route.toLowerCase()}`);
       }
     }

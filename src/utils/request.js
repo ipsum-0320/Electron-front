@@ -1,7 +1,7 @@
 import axios from "axios";
 import { ElMessage  } from "element-plus";
 import store from '../store';
-// import {setCookie, getCookie} from "@/utils/cookie";
+import {setCookie, getCookie} from "@/utils/cookie";
 
 const request = axios.create({
   baseURL: '/api',

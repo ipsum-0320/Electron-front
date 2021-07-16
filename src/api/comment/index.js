@@ -23,7 +23,7 @@ export function getCommentListByProductId(productId,pageNum,pageSize){
     return request({
         url: '/getCommentListByProductId',
         method: 'get',
-        data: {
+        params: {
             productId,
             pageNum,
             pageSize
@@ -35,7 +35,7 @@ export function getComment(commentId){
     return request({
         url: '/getComment',
         method: 'get',
-        data: {
+        params: {
             commentId
         }
     });
