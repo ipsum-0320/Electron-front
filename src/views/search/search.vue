@@ -2,8 +2,8 @@
   <div>
     <div class="container">
       <div class="search" tabindex="-1" :class="{active:isActive}">
-        <input type="text" class="search-input" @focus="oninput()">
-        <button class="search-button"  @focus="oninput()">
+        <input type="text" class="search-input" @focus="onfocus()" @input="oninput()" v-model="context">
+        <button class="search-button"  @focus="onfocus()" @click="getResult(context)">
           <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
             <path d="M424.024 766.098c-91.619 0-177.754-35.679-242.538-100.464-133.735-133.737-133.735-351.344 0-485.078 64.784-64.784
                  150.919-100.462 242.538-100.462s177.754 35.677 242.539 100.462c133.733 133.735 133.735 351.34 0
@@ -19,7 +19,7 @@
           Search
         </button>
         <div class="auto-complete" tabindex="-1">
-          <div class="auto-complete-item" v-for="item in autoCompleteItems" @click="getResult()">
+          <div class="auto-complete-item" v-for="item in autoCompleteItems" @click="getResult(item)">
             <span>{{item}}</span>
             <svg class="cancel" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" width="18" height="18">
               <path d="M222.6944 222.7968A323.1488 323.1488 0 0 0 133.6832 512c19.2512-87.3728 64.512-172.7488
@@ -45,7 +45,7 @@
         </div>
         <div class="result" v-show="!isShow">
           <div class="result-item" v-for="item in resultItems">
-            <img :src="require('@/assets/image/petImg/cat/catImg.jpg')" alt="">
+            <img :src="item.picture" alt="">
             <div class="description">{{item.description}}</div>
             <div class="productId">{{item.productId}}</div>
           </div>
@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import {autoComplete, search} from "@/api/search";
 
 export default {
   name: "search",
@@ -65,33 +66,33 @@ export default {
       isShow:true,
       isActive:false,
       autoCompleteItems:[],
-      resultItems:[]
+      resultItems:[],
+      context:''
     }
   },
   methods: {
-    oninput() {
+    onfocus() {
       if (this.isActive) return;
       this.isActive = true
-      this.autoCompleteItems=['111','222','333','444']
+      this.autoCompleteItems=['iphone12','huaweiP40','iphone12Pro','OPPOreno5']
     },
-    getResult() {
-      this.resultItems = [
-        {
-          imgSrc: '@/assets/image/petImg/cat/catImg.jpg',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa iste maiores nobis non repellat sunt?',
-          productId: 'Persian'
-        },
-        {
-          imgSrc: '@/assets/image/petImg/cat/catImg.jpg',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa iste maiores nobis non repellat sunt?',
-          productId: 'Persian'
-        },
-        {
-          imgSrc: '@/assets/image/petImg/cat/catImg.jpg',
-          description: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa iste maiores nobis non repellat sunt?',
-          productId: 'Persian'
-        }
-      ]
+    oninput() {
+      if(this.context === '') {
+        this.autoCompleteItems = ['iphone12','huaweiP40','iphone12Pro','OPPOreno5']
+      } else {
+        autoComplete(this.context).then(data => {
+          this.autoCompleteItems = data.slice(0,5)
+        }).catch(data => {
+          console.log(data)
+        })
+      }
+    },
+    getResult(item) {
+      search(item).then(data => {
+        this.resultItems = data
+      }).catch(err => {
+        console.log(err)
+      })
       this.isShow = false;
       document.querySelector('#move-focus-input').focus();
     }

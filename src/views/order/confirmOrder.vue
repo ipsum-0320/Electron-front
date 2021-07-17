@@ -22,11 +22,11 @@
             Purchased Pets
           </legend>
           <div class="cart-items">
-            <div class="empty-cart" v-if="cart.object.cartItems.length == 0">
+            <div class="empty-cart" v-if="cart === null || cart.cartItems.length === 0">
               <img src="@/assets/image/svg/index/noCategory.svg" alt="">
               <div class="tips">Sorry, no pets in your order.</div>
             </div>
-            <cart-item v-for="(cartItem, index) in cart.object.cartItems" :cartItem="cartItem" :index="index" :show-input="false" @deleteItem="deleteItem()" :key="cartItem.item.product.productId" ></cart-item>
+            <cart-item v-if="cart !== null" v-for="(cartItem, index) in cart.cartItems" :cartItem="cartItem" :index="index" :show-input="false" @deleteItem="deleteItem()" :key="cartItem.item.product.productId" ></cart-item>
           </div>
         </fieldset>
       </div>
@@ -64,101 +64,23 @@
 
 <script>
 import CartItem from "@/views/cart/cartItem";
+import { viewCart } from "@/api/cart";
+
 export default {
   name: "confirmOrder",
   components: {CartItem},
   data() {
     return {
-      cart: {
-        object:{
-          subTotal:55.5,
-          cartItems:[
-            {
-              item:{
-                itemId:'EST-13',
-                productId:null,
-                listPrice:18.5,
-                unitCost:null,
-                attribute1:'Green Adult',
-                attribute2:'白',
-                attribute3:'雄',
-                attribute4:null,
-                attribute5:null,
-                product:{
-                  productId: 'RP-LI-01',
-                  categoryId:'REPTILES',
-                  name:'1',
-                  description:'Friendly green friend',
-                  picture:null,
-                  publishStatus:1
-                },
-                quantity:9999
-              },
-              quantity: 2,
-              inStock:true,
-              total:37
-            },
-            {
-              item:{
-                itemId:'EST-13',
-                productId:null,
-                listPrice:19.5,
-                unitCost:null,
-                attribute1:'Green Adult',
-                attribute2:'白',
-                attribute3:'雄',
-                attribute4:null,
-                attribute5:null,
-                product:{
-                  productId: 'RP-LI-02',
-                  categoryId:'REPTILES',
-                  name:'2',
-                  description:'Friendly green friend',
-                  picture:null,
-                  publishStatus:1
-                },
-                quantity:9999
-              },
-              quantity: 2,
-              inStock:true,
-              total:37
-            },
-            {
-              item:{
-                itemId:'EST-13',
-                productId:null,
-                listPrice:20.5,
-                unitCost:null,
-                attribute1:'Green Adult',
-                attribute2:'白',
-                attribute3:'雄',
-                attribute4:null,
-                attribute5:null,
-                product:{
-                  productId: 'RP-LI-03',
-                  categoryId:'REPTILES',
-                  name:'3',
-                  description:'Friendly green friend',
-                  picture:null,
-                  publishStatus:1
-                },
-                quantity:9999
-              },
-              quantity: 2,
-              inStock:true,
-              total:37
-            }
-          ]
-        }
-      },
+      cart: null,
       isItemDeleting: null
     }
   },
   computed: {
     subTotal() {
+      if (this.cart === null) return
       let total = 0;
-      for (let i = 0; i < this.cart.object.cartItems.length; i++) {
-        total += this.cart.object.cartItems[i].item.listPrice * this.cart.object.cartItems[i].quantity;
+      for (let i = 0; i < this.cart.cartItems.length; i++) {
+        total += this.cart.cartItems[i].item.listPrice * this.cart.cartItems[i].quantity;
       }
       return total;
     }
@@ -171,8 +93,15 @@ export default {
       this.$emit('switch-next',1)
     },
     deleteItem(index) {
-      this.cart.object.cartItems.splice(index, 1);
+      this.cart.cartItems.splice(index, 1);
     }
+  },
+  created() {
+    viewCart(this.$store.state.username).then(data => {
+      this.cart = data
+    }).catch(err => {
+      console.log(err)
+    })
   }
 }
 </script>
