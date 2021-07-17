@@ -9,14 +9,14 @@
       <div class="order-complete-msg-content">
         Congratulations, the order has been completed.
         You can click
-        <div class="order-link">
+        <div class="order-link" @click="$router.push('/main/orderList')">
           <img src="@/assets/image/svg/index/order.svg" alt="" class="icon-in-text">
           <div class="text">Order</div>
         </div>
         to view the details of the order.
       </div>
     </div>
-    <div class="complete-btn">
+    <div class="complete-btn" @click="$router.push('/home')">
       OK
       <svg viewBox="0 0 1024 1024">
         <path d="M914.030911 321.988412c36.942377-42.659589 43.73099-104.642269 15.033391-137.729851-28.691459-33.096792-82.397638-25.289989-119.346155

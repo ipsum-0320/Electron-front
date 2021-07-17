@@ -42,7 +42,7 @@
     </transition>
 
     <transition :duration="1000" name="fade">
-      <payment @switch-previous="switchStep" @switch-next="switchStep" v-if="activeStep === 3" @pay-succeed="newOrder"></payment>
+      <payment @switch-previous="switchStep" @switch-next="switchStep" v-if="activeStep === 3"></payment>
     </transition>
 
     <transition :duration="1000" name="fade">

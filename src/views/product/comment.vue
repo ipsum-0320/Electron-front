@@ -25,7 +25,7 @@ export default {
   created() {
     console.log(this.productId)
     getCommentListByProductId(this.productId, 1, 20).then((res) => {
-      this.comments = res.object
+      this.comments = res
     }).catch((err) => {
       console.log(err)
     })
