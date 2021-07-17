@@ -96,6 +96,8 @@
 import {viewProduct} from "@/api/catalog";
 import {viewCart, addItemToCart} from "@/api/cart";
 import Comment from "@/views/product/comment";
+import {ElMessage} from 'element-plus';
+
 export default {
   name: "product",
   components: {Comment},
@@ -135,16 +137,27 @@ export default {
     },
     clickAddCart() {
       this.addCartActive = true
-      setTimeout(() => this.addCartActive = false, 1000)
+      setTimeout(() => this.addCartActive = false, 2500);
       this.quantityInCart++
       // addItemToCart(this.$store.state.username, )
-      let items = document.getElementsByClassName('option-container')
+      let items = document.getElementsByClassName('option-container');
+      let isChecked = false;
       for(let i = 0; i < items.length; i++) {
         if(items[i].firstChild.checked) {
           let itemId = items[i].firstChild.id
           let username = this.$store.state.username
-          addItemToCart(username, itemId, this.quantity)
+          addItemToCart(username, itemId, this.quantity);
+          isChecked = true;
         }
+      }
+      if (!isChecked) {
+        ElMessage({
+          showClose: true,
+          center: true,
+          message: 'Please select an item.',
+          type: 'warning',
+          duration: 2000
+        });
       }
     },
     clickImg(index) {
@@ -205,13 +218,13 @@ export default {
   created() {
     this.productId = this.$route.query.productId
     viewProduct(this.productId).then((res) => {
-      this.itemList = res.object.itemList
+      this.itemList = res.itemList
     }).catch((err) => {
       console.log(err)
     })
 
     viewCart(this.$store.state.username).then((res) => {
-      this.quantityInCart = res.object.cartItems.length
+      this.quantityInCart = res.cartItems.length
     }).catch(err => {
       console.log(err)
     })

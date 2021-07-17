@@ -43,22 +43,24 @@ export default {
         this.receiveMsgAnimation = false;
       });
       this.$store.watch((state, getters) => state.webSocketData, () => {
+        if (this.$store.state.webSocketData === undefined) return;
+        // 初始化 $store.watch 并不会致使回调函数的调用。
         this.receiveMsgInfo = [];
         this.receiveMsgInfo.push(this.$store.state.webSocketData);
+        this.$store.commit('setWebSocketData', undefined);
         getAvatar(this.receiveMsgInfo[0].username).then(res => {
           this.avatar = res;
           this.receiveMsgAnimation = true;
-          // this.$store.commit('setWebSocketData', undefined);
         }).catch(err => {
           console.log(err);
         });
       });
-      if (this.$store.state.webSocketData.length !== 0) {
+      if (this.$store.state.webSocketData !== undefined && this.$store.state.webSocketData.length !== 0) {
         this.receiveMsgInfo = this.$store.state.webSocketData;
+        this.$store.commit('setWebSocketData', undefined);
         getAvatar(this.receiveMsgInfo[0].username).then(res => {
           this.avatar = res;
           this.receiveMsgAnimation = true;
-          // this.$store.commit('setWebSocketData', undefined);
         }).catch(err => {
           console.log(err);
         });

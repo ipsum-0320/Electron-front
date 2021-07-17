@@ -47,10 +47,9 @@ export default {
     }
   },
   created() {
-    console.log(this.$route.query.categoryId)
     viewCategory(this.$route.query.categoryId).then((data) => {
-      this.products = data.productList
-      let len = this.products.length
+      this.products = data.productList;
+      let len = this.products.length;
       this.productWidth = (60 * (len - 1) + 325 * len) + 'px'
     }).catch((err) => {
       console.log(err)

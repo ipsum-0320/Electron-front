@@ -32,6 +32,8 @@
 
 <script>
 
+import {removeItemFromCart} from "@/api/cart";
+
 export default {
   name: "cartItem",
   data() {
@@ -59,10 +61,14 @@ export default {
       this.$emit('add');
     },
     deleteItem() {
-      this.isDeleting = true;
-      setTimeout(() => {
-        this.$emit('deleteItem');
-      }, 1000);
+      removeItemFromCart(this.$store.state.username, this.cartItem.item.itemId).then(res => {
+        this.isDeleting = true;
+        setTimeout(() => {
+          this.$emit('deleteItem');
+        }, 1000);
+      }).catch(err => {
+        console.log(err);
+      });
     },
     /*
       删除v-for元素时，为什么会出现穿透？

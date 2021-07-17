@@ -8,7 +8,7 @@
         </div>
         <div class="cart-items">
           <cart-item v-if="cart !== null" v-for="(cartItem, index) in cart.cartItems" :cartItem="cartItem" :index="index" @sub="subItem(index)" @add="addItem(index)" @deleteItem="deleteItem(index)" :key="cartItem.item.product.productId" :class="{ 'delete-cart-item': isItemDeleting[index] }"></cart-item>
-          <!-- 请求时间太长，导致页面渲染速度快于拿到回调数据的速度 -->
+          <!-- 请求时间太长，导致页面渲染速度快于拿到回调数据的速度，可以采用以上方式防止渲染错误 -->
         </div>
       </div>
       <div class="delete" @click="deleteItems">
@@ -34,6 +34,8 @@
 <script>
 import {viewCart} from "@/api/cart";
 import cartItem from "@/views/cart/cartItem";
+import {removeItemFromCart} from "@/api/cart";
+
 
 export default {
   name: "cart",
@@ -57,19 +59,24 @@ export default {
     deleteItems() {
       let checked_items = document.querySelectorAll('[type="checkbox"]:checked');
       for (let i = 0; i < checked_items.length; i++) {
-        let index = checked_items[i].parentNode.getAttribute('index');
-        this.isItemDeleting[index] = true;
-        let id = this.cart.cartItems[index].item.product.productId;
-        setTimeout(() => {
-          for (let i = 0; i < this.cart.cartItems.length; i++) {
-            if (this.cart.cartItems[i].item.product.productId === id) {
-              this.isItemDeleting[i] = false;
-              this.cart.cartItems.splice(i, 1);
-              this.isItemDeleting.splice(0, 1);
-              this.isEmptyShow = this.cart.cartItems.length === 0;
+        removeItemFromCart(this.$store.state.username, this.cart.cartItems[i].item.itemId).then(res => {
+          let index = checked_items[i].parentNode.getAttribute('index');
+          this.isItemDeleting[index] = true;
+          let id = this.cart.cartItems[index].item.product.productId;
+          setTimeout(() => {
+            for (let i = 0; i < this.cart.cartItems.length; i++) {
+              if (this.cart.cartItems[i].item.product.productId === id) {
+
+                this.isItemDeleting[i] = false;
+                this.cart.cartItems.splice(i, 1);
+                this.isItemDeleting.splice(0, 1);
+                this.isEmptyShow = this.cart.cartItems.length === 0;
+              }
             }
-          }
-        }, 1000);
+          }, 1000);
+        }).catch(err => {
+          console.log(err);
+        });
       }
     },
     deleteItem(index) {
@@ -106,9 +113,7 @@ export default {
   // }
   created() {
     viewCart(this.$store.state.username).then(res => {
-      console.log(this.cart);
       this.cart = res;
-      console.log(this.cart);
       let length = this.cart.cartItems.length;
       this.isEmptyShow = length === 0;
       this.isItemDeleting = new Array(length);
