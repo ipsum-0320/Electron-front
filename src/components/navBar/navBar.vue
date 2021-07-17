@@ -35,42 +35,42 @@
         <div class="nav-pet-content">
           <div class="triangle"></div>
           <div class="content">
-            <div class="nav-pet-content-option nav-pet-content-option-fish">
+            <div class="nav-pet-content-option nav-pet-content-option-fish" @click="router1('FISH')">
               <img src="@/assets/image/svg/navbar/FISH.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">FISH</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-bird">
+            <div class="nav-pet-content-option nav-pet-content-option-bird" @click="router1('BIRDS')">
               <img src="@/assets/image/svg/navbar/BIRDS.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">BIRD</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-dog" @click="router('/main/category')">
+            <div class="nav-pet-content-option nav-pet-content-option-dog" @click="router1('DOGS')">
               <img src="@/assets/image/svg/navbar/DOGS.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">DOG</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-cat">
+            <div class="nav-pet-content-option nav-pet-content-option-cat" @click="router1('CATS')">
               <img src="@/assets/image/svg/navbar/CATS.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">CAT</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-reptile">
+            <div class="nav-pet-content-option nav-pet-content-option-reptile" @click="router1('REPTILES')">
               <img src="@/assets/image/svg/navbar/REPTILES.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">REPTILE</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="nav-option nav-option-cart" @click="router('/main/cart')">
+      <div class="nav-option nav-option-cart" @click="router2('/main/cart')">
         <img src="@/assets/image/svg/index/cart.svg" alt="">
         <div class="icon-font">Cart</div>
       </div>
-      <div class="nav-option nav-option-order" @click="router('/main/orderList')">
+      <div class="nav-option nav-option-order" @click="router2('/main/orderList')">
         <img src="@/assets/image/svg/index/order.svg" alt="">
         <div class="icon-font">Order</div>
       </div>
-      <div class="nav-option nav-option-search" @click="router('/main/search')">
+      <div class="nav-option nav-option-search" @click="router2('/main/search')">
         <img src="@/assets/image/svg/index/search.svg" alt="">
         <div class="icon-font">Search</div>
       </div>
-      <div class="nav-option nav-option-collection" @click="router('/main/message')">
+      <div class="nav-option nav-option-collection" @click="router2('/main/message')">
         <img src="@/assets/image/svg/navbar/message.svg" alt="">
         <div class="icon-font">Message</div>
       </div>
@@ -112,8 +112,11 @@ import {ElMessage} from "element-plus";
 export default {
   name: "navBar",
   methods: {
-    router(route) {
-      this.$router.push(route);
+    router1(categoryId) {
+      this.$router.push({path: '/main/category', query:{categoryId: categoryId}})
+    },
+    router2(path) {
+      this.$router.push(path);
     },
     signOut() {
       this.$store.commit('setIsLogin', false);

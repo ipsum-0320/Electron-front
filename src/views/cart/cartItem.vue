@@ -88,6 +88,7 @@ export default {
     border-radius: 10px;
     margin-top: 40px;
     margin-left: 5%;
+    margin-right: 3%;
     border-left: 3px solid #11564b;
     border-right: 3px solid #11564b;
     padding: 10px 40px;

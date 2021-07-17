@@ -102,7 +102,8 @@ export default {
       let inputs = new Array()
       inputs.push(input0,input1,input2,input3,input4,input5)
       if(event.keyCode == 8) {
-        inputs[index-1].focus().value = ''
+        inputs[index-1].focus()
+        inputs[index-1].value = ''
       }else if(index+1 != 6) {
         inputs[index+1].focus()
       }
