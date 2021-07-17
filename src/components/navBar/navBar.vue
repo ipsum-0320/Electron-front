@@ -1,6 +1,6 @@
 <template>
   <div class="nav-bar">
-    <div class="web-logo" @click="router('/home')">
+    <div class="web-logo" @click="router2('/home')">
       <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" class="logo-image">
         <path d="M314.9824 571.35104c78.2336-17.24416
         103.2192-87.28576 68.9152-166.4-13.55776-31.3344-68.28032-138.69056-90.7264-182.59968-12.14464 10.19904-22.17984

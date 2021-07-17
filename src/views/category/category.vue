@@ -1,9 +1,9 @@
 <template>
   <div>
-    <div class="container">
+    <div class="container" v-if="category !== null">
       <div class="category-title">
         <img src="@/assets/image/svg/navbar/DOGS.svg" alt="">
-        <div class="category-title-text">DOG</div>
+        <div class="category-title-text">{{ category.name }}</div>
       </div>
       <div class="back-to-index" @click="router('/home')">
         <span>Back to Homepage</span>
@@ -37,8 +37,9 @@ export default {
   name: "category",
   data() {
     return {
-      products:null,
-      productWidth:null
+      products: null,
+      category: null,
+      productWidth: null
     }
   },
   methods: {
@@ -48,6 +49,8 @@ export default {
   },
   created() {
     viewCategory(this.$route.query.categoryId).then((data) => {
+      console.log(data)
+      this.category = data.category
       this.products = data.productList;
       let len = this.products.length;
       this.productWidth = (60 * (len - 1) + 325 * len) + 'px'

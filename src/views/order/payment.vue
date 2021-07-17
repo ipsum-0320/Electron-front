@@ -143,7 +143,9 @@ export default {
               }
             ]
           }
-          finalOrder(data).catch(err => {
+          finalOrder(data).then(res => {
+            console.log(res)
+          }).catch(err => {
             console.log(err)
           })
         }
