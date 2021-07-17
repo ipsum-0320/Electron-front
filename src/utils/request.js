@@ -33,8 +33,8 @@ request.interceptors.response.use(res => {
     })
     return Promise.reject(res.status);
   } else {
-    if (!/^2/.test(res.data.code)) {
-      // 后端自定义码非以 2 开头则来到这里。
+    if (res.data.code === 500) {
+      // 后端自定义码以 500 开头则来到这里。
       return Promise.reject(res.data.code);
     }
     // setCookie('token', res.headers.authorization, 1);

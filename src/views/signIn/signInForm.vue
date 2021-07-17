@@ -170,7 +170,7 @@ export default {
       document.querySelector('.login-form .waiting').style['visibility'] = 'visible';
       try {
         const res = await login(this.username, this.password);
-        if (res.code === 10001) {
+        if (res === null) {
           this.$store.commit('setIsLogin', false);
         } else {
           this.$store.commit('setIsLogin', true);

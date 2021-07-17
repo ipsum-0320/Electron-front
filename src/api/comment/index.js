@@ -67,7 +67,7 @@ export function getChildCommentListByUsername(username,pageNum,pageSize){
     return request({
         url: '/getChildCommentListByUsername',
         method: 'get',
-        data: {
+        params: {
             username,
             pageNum,
             pageSize

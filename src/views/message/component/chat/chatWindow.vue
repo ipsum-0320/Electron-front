@@ -121,7 +121,8 @@ export default {
         this.$emit('receiveData', this.$store.state.webSocketData);
         return;
       }
-      // 会出现两种可能的BUG
+      // 但是不知道为什么提示动画那边的内存会被清除掉，我不知道这是为什么...
+      // shit，错误别有原因，内存还是不会被清除掉的。
       this.chatMessageItems.push(this.$store.state.webSocketData);
       setTimeout(() => {
         this.window.scrollTop = this.window.scrollHeight;

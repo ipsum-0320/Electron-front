@@ -10,10 +10,10 @@
               <span>{{ item.username }}</span> reply to your comments:
             </div>
             <div class="reply-message">
-              {{ item.replyMessage }}
+              {{ item.context }}
             </div>
             <div class="reply-operation">
-              {{ item.createdTime }}
+              {{ item.createTime }}
               <div class="reply-operation-reply" :class="{ 'operation-active': isReplyAgain[index] }" @click="isReplyAgain[index] = !isReplyAgain[index];">
                 <svg viewBox="0 0 1024 1024" class="sideBarOption-svg"><path d="M902.6 526.7h-71.4c0.2-5.3 0.4-10.6 0.4-15.9 0-187.6-140.5-342.4-327.9-342.4S161.5 323.2 161.5 510.7c0 56.9 23.1 130.8 32.1 160 6 19.5 20.5 54.9 43.5 106.3l-76-1.2c67.2 49.2 181 75.7 299 73.9l11.7-0.3 2.8-0.1 2.8 0.1c5.1 0.2 10.3 0.3 15.4 0.3 35.1 0 69.3-5.3 101.8-15.5l66.3 52.9c-50.8 23.2-107.1 37.1-166.3 37.1-6.2 0-13.7 0.3-19.8 0-4.3 0.2-9.5-0.1-13.8 0-125.6 1.9-333.7-32-406.1-164.4-6.9-12.7-6.5-33.9 0-42.1s16.5-9.5 23-8.2l56.2 8.6c-10.8-28.5-20.8-56.5-29.9-84-11.9-38.1-14.3-80.2-14.3-122.2C89.9 286.2 276.4 99.6 502 99.6S902.9 285 902.9 510.8c0 5.3-0.1 10.6-0.3 15.9z m-142.3 97.7c45.3 2.6 80.3 5.1 105.2 7.7 69.2 7.1 105.4 66.4 108.7 177.9-26.3-19.7-50.8-34.6-73.6-44.9-20.9-9.3-67.6-12.4-140.3-9.3v68.9c0 15.5-10 20.3-22.3 10.5L568.8 699.8c-12.3-9.8-12.3-25.8 0-35.7l169.3-135.5c12.3-9.8 22.3-5.2 22.3 10.5l-0.1 85.3z"></path></svg>
                 reply
@@ -37,7 +37,9 @@
 </template>
 
 <script>
-import deleteImg from '@/assets/image/svg/message/delete.svg'
+import deleteImg from '@/assets/image/svg/message/delete.svg';
+import {getChildCommentListByUsername} from "@/api/comment";
+import {getComment} from "@/api/comment";
 
 export default {
   name: "reply",
@@ -60,43 +62,52 @@ export default {
 
   },
   created() {
-    this.replyItems = [
-      {
-        avatar: '',
-        username: 'lorem.',
-        replyMessage: 'That\'s so funny!',
-        createdTime: '2021-06-05 13:29',
-        repliedContent: 'Lorem ipsum dolor sit amet.'
-      },
-      {
-        avatar: '',
-        username: 'lorem.',
-        replyMessage: 'That\'s so funny! That\'s so funny!',
-        createdTime: '2021-06-05 13:29',
-        repliedContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam asperiores atque blanditiis distinctio hic minus quibusdam sequi similique.'
-      },
-      {
-        avatar: '',
-        username: 'lorem.',
-        replyMessage: 'That\'s so funny! That\'s so funny! That\'s so funny! That\'s so funny! That\'s so funny!',
-        createdTime: '2021-06-05 13:29',
-        repliedContent: 'Lorem ipsum dolor sit amet, consectetur.'
-      },
-      {
-        avatar: '',
-        username: 'lorem.',
-        replyMessage: 'That\'s so funny!',
-        createdTime: '2021-06-05 13:29',
-        repliedContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. blanditiis distinctio hic minus quibusdam sequi similique.'
-      },
-      {
-        avatar: '',
-        username: 'lorem.',
-        replyMessage: 'That\'s so funny! That\'s so funny! That\'s so funny!',
-        createdTime: '2021-06-05 13:29',
-        repliedContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam asperiores atque.'
-      }
-    ]
+    getChildCommentListByUsername(this.$store.state.username, 1, 100).then(res => {
+      console.log(res);
+      console.log(res);
+      getComment();
+    }).catch(err => {
+      console.log(err);
+    });
+
+
+    // this.replyItems = [
+    //   {
+    //     avatar: '',
+    //     username: 'lorem.',
+    //     replyMessage: 'That\'s so funny!',
+    //     createdTime: '2021-06-05 13:29',
+    //     repliedContent: 'Lorem ipsum dolor sit amet.'
+    //   },
+    //   {
+    //     avatar: '',
+    //     username: 'lorem.',
+    //     replyMessage: 'That\'s so funny! That\'s so funny!',
+    //     createdTime: '2021-06-05 13:29',
+    //     repliedContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam asperiores atque blanditiis distinctio hic minus quibusdam sequi similique.'
+    //   },
+    //   {
+    //     avatar: '',
+    //     username: 'lorem.',
+    //     replyMessage: 'That\'s so funny! That\'s so funny! That\'s so funny! That\'s so funny! That\'s so funny!',
+    //     createdTime: '2021-06-05 13:29',
+    //     repliedContent: 'Lorem ipsum dolor sit amet, consectetur.'
+    //   },
+    //   {
+    //     avatar: '',
+    //     username: 'lorem.',
+    //     replyMessage: 'That\'s so funny!',
+    //     createdTime: '2021-06-05 13:29',
+    //     repliedContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. blanditiis distinctio hic minus quibusdam sequi similique.'
+    //   },
+    //   {
+    //     avatar: '',
+    //     username: 'lorem.',
+    //     replyMessage: 'That\'s so funny! That\'s so funny! That\'s so funny!',
+    //     createdTime: '2021-06-05 13:29',
+    //     repliedContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam asperiores atque.'
+    //   }
+    // ]
   }
 }
 </script>

@@ -37,22 +37,24 @@ export default {
         this.receiveMsgAnimation = false;
       });
       this.$store.watch((state, getters) => state.webSocketData, () => {
+        if (this.$store.state.webSocketData === undefined) return;
+        if (this.$route.path === '/main/message/chat') return;
         this.receiveMsgInfo = [];
         this.receiveMsgInfo.push(this.$store.state.webSocketData);
+        this.$store.commit('setWebSocketData', undefined);
         getAvatar(this.receiveMsgInfo[0].username).then(res => {
           this.avatar = res;
           this.receiveMsgAnimation = true;
-          // this.$store.commit('setWebSocketData', undefined);
         }).catch(err => {
           console.log(err);
         });
       });
-      if (this.$store.state.webSocketData.length !== 0) {
+      if (this.$store.state.webSocketData !== undefined && this.$store.state.webSocketData.length !== 0) {
         this.receiveMsgInfo = this.$store.state.webSocketData;
+        this.$store.commit('setWebSocketData', undefined);
         getAvatar(this.receiveMsgInfo[0].username).then(res => {
           this.avatar = res;
           this.receiveMsgAnimation = true;
-          // this.$store.commit('setWebSocketData', undefined);
         }).catch(err => {
           console.log(err);
         });
