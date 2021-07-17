@@ -58,7 +58,7 @@
                 </div>
               </div>
               <div class="buy-form-btn">
-                <div class="buy-now-btn" @click="$router.push('/main/order')">Buy now</div>
+                <div class="buy-now-btn" @click="buyNow">Buy now</div>
                 <div class="add-cart-btn" :class="{active:addCartActive}" @click="clickAddCart">
                   <span>Add to cart</span>
                   <img src="@/assets/image/svg/web_logo.svg" alt="">
@@ -196,6 +196,10 @@ export default {
     },
     clickTrigger() {
       this.checkProduct = !this.checkProduct
+    },
+    buyNow() {
+      this.clickAddCart()
+      this.$router.push('/main/order')
     }
   },
   created() {

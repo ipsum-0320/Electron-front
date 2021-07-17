@@ -81,6 +81,9 @@
 </template>
 
 <script>
+import {payment} from "@/api/Payment";
+import {finalOrder} from "@/api/order";
+
 export default {
   name: "payment",
   data() {
@@ -95,16 +98,67 @@ export default {
       this.$emit('switch-previous',-1)
     },
     clickNext() {
-      this.$emit('switch-next',1)
+      let input0 = this.$refs.ref0.value, input1 = this.$refs.ref1.value, input2 = this.$refs.ref2.value, input3 = this.$refs.ref3.value, input4 = this.$refs.ref4.value, input5 = this.$refs.ref5.value
+      let inputs = new Array()
+      inputs.push(input0,input1,input2,input3,input4,input5)
+      let password = inputs.join('')
+      console.log(password)
+      payment(password, this.$store.state.username).then(data => {
+        if(data === null) {
+          this.$emit('switch-next',1)
+          let data = {
+            order: {
+              username: this.$store.state.username,
+              shipAddress1: '',
+              shipAddress2: '',
+              shipCity: '',
+              shipState: '',
+              shipZip: '',
+              shipCountry: '',
+              billAddress1: '',
+              billAddress2: '',
+              billCity: '',
+              billState: '',
+              billZip: '',
+              billCountry: '',
+              courier: '',
+              totalPrice: 11,
+              billToFirstName: '',
+              billToLastName: '',
+              shipToFirstName: '',
+              shipToLastName: '',
+              creditCard: '',
+              expiryDate: '',
+              cardType: '',
+              locale: ''
+            },
+            lineItems: [
+              {
+                itemId:'EST-3',
+                quantity: 1
+              },
+              {
+                itemId: 'EST-2',
+                quantity: 2
+              }
+            ]
+          }
+          finalOrder(data).catch(err => {
+            console.log(err)
+          })
+        }
+      }).catch(err => {
+        console.log(err)
+      })
     },
     inputPwd(index) {
       let input0 = this.$refs.ref0, input1 = this.$refs.ref1, input2 = this.$refs.ref2, input3 = this.$refs.ref3, input4 = this.$refs.ref4, input5 = this.$refs.ref5
-      let inputs = new Array()
+      let inputs = []
       inputs.push(input0,input1,input2,input3,input4,input5)
-      if(event.keyCode == 8) {
+      if(event.keyCode === 8) {
         inputs[index-1].focus()
         inputs[index-1].value = ''
-      }else if(index+1 != 6) {
+      }else if(index+1 !== 6) {
         inputs[index+1].focus()
       }
     },

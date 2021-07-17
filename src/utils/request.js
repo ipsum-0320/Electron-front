@@ -33,7 +33,7 @@ request.interceptors.response.use(res => {
     })
     return Promise.reject(res.status);
   } else {
-    if (!/^2/.test(res.data.code)) {
+    if (res.data.code === 500) {
       // 后端自定义码非以 2 开头则来到这里。
       return Promise.reject(res.data.code);
     }
@@ -41,6 +41,7 @@ request.interceptors.response.use(res => {
     store.commit('setToken', res.headers.authorization);
     // 设置 Token。
     // console.log('response');
+    console.log(res.data);
     return Promise.resolve(res.data.object);
   }
 }, err => {

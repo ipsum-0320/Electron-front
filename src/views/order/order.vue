@@ -42,7 +42,7 @@
     </transition>
 
     <transition :duration="1000" name="fade">
-      <payment @switch-previous="switchStep" @switch-next="switchStep" v-if="activeStep === 3"></payment>
+      <payment @switch-previous="switchStep" @switch-next="switchStep" v-if="activeStep === 3" @pay-succeed="newOrder"></payment>
     </transition>
 
     <transition :duration="1000" name="fade">
@@ -56,6 +56,8 @@ import selectAddress from "@/views/order/selectAddress";
 import confirmOrder from "@/views/order/confirmOrder";
 import Payment from "@/views/order/payment";
 import Complete from "@/views/order/complete";
+import {finalOrder} from "@/api/order";
+
 export default {
   name: "order",
   components: {
