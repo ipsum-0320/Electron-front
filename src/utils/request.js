@@ -41,6 +41,7 @@ request.interceptors.response.use(res => {
     store.commit('setToken', res.headers.authorization);
     // 设置 Token。
     // console.log('response');
+    console.log(res);
     return Promise.resolve(res.data.object);
   }
 }, err => {

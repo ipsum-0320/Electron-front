@@ -3,14 +3,14 @@
     <div class="reply-content">
       <div class="reply-item-and-reply-again" v-for="(item, index) in replyItems">
         <div class="reply-item">
-          <img src="@/assets/image/avatar/avatar.jpg" alt="" class="replier-avatar">
+          <img :src="avatars[index]" alt="" class="replier-avatar">
           <!-- 引入失败好像只会出现在引入 svg 文件中 -->
           <div class="reply-item-content">
             <div class="reply-user">
-              <span>{{ item.username }}</span> reply to your comments:
+              <span>{{ item.username }}</span> reply:
             </div>
             <div class="reply-message">
-              {{ item.context }}
+              {{ item.username === $store.state.username ? `@${item.toUsername}  ${item.context}` : item.context }}
             </div>
             <div class="reply-operation">
               {{ item.createTime }}
@@ -20,14 +20,14 @@
               </div>
             </div>
           </div>
-          <div class="replied-content">
-            {{ item.repliedContent }}
+          <div class="replied-content" v-if="comments.length !== 0 && comments[index] !== undefined">
+            {{ comments[index].context }}
           </div>
         </div>
         <div class="reply-again" :class="{ 'active': isReplyAgain[index] }">
-          <img src="@/assets/image/avatar/avatar.jpg" alt="" class="user-avatar">
-          <textarea class="reply-enter" placeholder="It is strictly forbidden to publish pornographic, violent, or reactionary remarks."></textarea>
-          <div class="confirm-btn">
+          <img :src="$store.state.avatarURL" alt="" class="user-avatar">
+          <textarea class="reply-enter" placeholder="It is strictly forbidden to publish pornographic, violent, or reactionary remarks." v-model="reply_content"></textarea>
+          <div class="confirm-btn" @click="reply(index)">
             reply
           </div>
         </div>
@@ -38,8 +38,10 @@
 
 <script>
 import deleteImg from '@/assets/image/svg/message/delete.svg';
-import {getChildCommentListByUsername} from "@/api/comment";
+import {getChildCommentListByUsername, makeReply} from "@/api/comment";
 import {getComment} from "@/api/comment";
+import {ElMessage} from "element-plus";
+import {getAvatar} from "@/api/user";
 
 export default {
   name: "reply",
@@ -48,6 +50,9 @@ export default {
       deleteImg,
       replyItems: null,
       isReplyAgain: null,
+      comments: [],
+      avatars: [],
+      reply_content: ''
     };
   },
   watch: {
@@ -59,17 +64,38 @@ export default {
     }
   },
   methods: {
-
+    reply(index) {
+      let replyPackage = {
+        parentId: String(this.comments[index].commentId),
+        username: this.$store.state.username,
+        toUsername: this.replyItems[index].username === this.$store.state.username ? this.replyItems[index].toUsername : this.replyItems[index].username,
+        context: this.reply_content
+      };
+      makeReply(replyPackage).then(res => {
+        this.isDialogShow = false;
+        this.reply_content = '';
+        ElMessage({
+          showClose: true,
+          center: true,
+          message: 'success.',
+          type: 'success',
+          duration: 2000
+        });
+      });
+    }
   },
   created() {
-    getChildCommentListByUsername(this.$store.state.username, 1, 100).then(res => {
-      console.log(res);
-      console.log(res);
-      getComment();
+    getChildCommentListByUsername(this.$store.state.username, 1, 100).then(async res => {
+      this.replyItems = res;
+      for (let i = 0; i < this.replyItems.length; i++) {
+        let comment = await getComment(this.replyItems[i].parentId);
+        this.comments.push(comment);
+        let avatarURL = await getAvatar(res[i].username);
+        this.avatars.push(avatarURL);
+      }
     }).catch(err => {
       console.log(err);
     });
-
 
     // this.replyItems = [
     //   {

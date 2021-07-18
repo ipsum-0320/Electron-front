@@ -68,7 +68,7 @@
           </div>
         </div>
       </transition>
-      <div class="cart-link">
+      <div class="cart-link" @click="$router.push('/main/cart')">
         <svg viewBox="0 0 1024 1024">
           <path d="M332.8 790.528q19.456 0 36.864 7.168t30.208 19.968 20.48 30.208 7.68 36.864-7.68 36.864-20.48 30.208-30.208
      20.48-36.864 7.68q-20.48 0-37.888-7.68t-30.208-20.48-20.48-30.208-7.68-36.864 7.68-36.864 20.48-30.208 30.208-19.968
@@ -136,10 +136,6 @@ export default {
       this.collectionActive = !this.collectionActive
     },
     clickAddCart() {
-      this.addCartActive = true
-      setTimeout(() => this.addCartActive = false, 2500);
-      this.quantityInCart++
-      // addItemToCart(this.$store.state.username, )
       let items = document.getElementsByClassName('option-container');
       let isChecked = false;
       for(let i = 0; i < items.length; i++) {
@@ -148,6 +144,10 @@ export default {
           let username = this.$store.state.username
           addItemToCart(username, itemId, this.quantity);
           isChecked = true;
+          this.addCartActive = true
+          setTimeout(() => this.addCartActive = false, 2500);
+          this.quantityInCart++
+          break;
         }
       }
       if (!isChecked) {

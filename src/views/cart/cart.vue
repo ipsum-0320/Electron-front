@@ -66,7 +66,6 @@ export default {
           setTimeout(() => {
             for (let i = 0; i < this.cart.cartItems.length; i++) {
               if (this.cart.cartItems[i].item.product.productId === id) {
-
                 this.isItemDeleting[i] = false;
                 this.cart.cartItems.splice(i, 1);
                 this.isItemDeleting.splice(0, 1);

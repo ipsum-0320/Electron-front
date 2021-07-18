@@ -1,6 +1,6 @@
 <template>
   <div class="nav-bar">
-    <div class="web-logo" @click="router('/home')">
+    <div class="web-logo" @click="router2('/home')">
       <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg" class="logo-image">
         <path d="M314.9824 571.35104c78.2336-17.24416
         103.2192-87.28576 68.9152-166.4-13.55776-31.3344-68.28032-138.69056-90.7264-182.59968-12.14464 10.19904-22.17984
@@ -81,15 +81,15 @@
         <div class="profile-name"> {{ $store.state.username }} </div>
         <div class="divide-line"></div>
         <div class="profile-group">
-          <div class="profile-option" @click="router('/main/user/profile')">
+          <div class="profile-option" @click="router2('/main/user/profile')">
             <img src="@/assets/image/svg/index/profile.svg" alt="" class="icon">
             <div class="icon-font">Profile</div>
           </div>
-          <div class="profile-option" @click="router('/main/user/log')">
+          <div class="profile-option" @click="router2('/main/user/log')">
             <img src="@/assets/image/svg/navbar/log.svg" alt="" class="icon">
             <div class="icon-font">Log</div>
           </div>
-          <div class="profile-option" @click="router('/main/user/collection')">
+          <div class="profile-option" @click="router2('/main/user/collection')">
             <img src="@/assets/image/svg/index/collection.svg" alt="" class="icon">
             <div class="icon-font">Collection</div>
           </div>

@@ -1,19 +1,24 @@
 <template>
   <div class="comment-item">
-    <img src="@/assets/image/avatar/avatar.jpg" alt="">
+    <img :src="url" alt="">
     <div class="comment-info">
       <div class="user-name">{{ comment.username }}</div>
       <div class="comment-text">{{comment.context}}</div>
       <div class="comment-date">{{ comment.createTime }}</div>
+      <div class="reply-btn" v-if="comment.username !== $store.state.username" @click="reply">reply</div>
     </div>
-
   </div>
 </template>
 
 <script>
 export default {
   name: "commentItem",
-  props:['comment']
+  props:['comment', 'url'],
+  methods: {
+    reply() {
+      this.$emit('reply');
+    }
+  }
 }
 </script>
 
@@ -21,7 +26,6 @@ export default {
 .comment-item {
   text-align: left;
   box-sizing: border-box;
-  padding: 0;
   width: 90%;
   min-height: 25%;
   display: flex;
@@ -41,6 +45,7 @@ export default {
 
   .comment-info {
     margin-left: 1em;
+    position: relative;
 
     .user-name {
       color: #11564b;
@@ -56,6 +61,33 @@ export default {
       margin-top: 0.5em;
       color: #11564b;
     }
+
+    .reply-btn {
+      border-radius: 10px;
+      border: 3px solid #11564b;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 80px;
+      height: 80px;
+      background-color: #D6D5B7;
+      color: #11564b;
+      font-weight: bold;
+      font-size: 24px;
+      right: -560px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color .5s, color .5s;
+
+      &:hover {
+        background-color: #11564b;
+        color: #D6D5B7;
+      }
+
+    }
+
   }
 
   &:hover {

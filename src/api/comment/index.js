@@ -13,9 +13,7 @@ export function makeReply(data){
     return request({
         url: '/makeReply',
         method: 'post',
-        data: {
-            data
-        }
+        data: data
     });
 }
 

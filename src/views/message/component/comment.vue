@@ -65,72 +65,74 @@ export default {
     }
   },
   created() {
-    this.commentItems = [
-      {
-        category: 'DOG',
-        product: 'Bulldog',
-        item: 'dolor sit amet',
-        createdTime: '2021-06-05 13:29',
-        commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-        reply: [
-          {
-            username: 'lorem.',
-            createdTime: '2021-06-05 13:29',
-            replyContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur nihil, non odit omnis sapiente similique.',
-          },
-          {
-            username: 'lorem.',
-            createdTime: '2021-06-05 13:29',
-            replyContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur nihil, non odit omnis sapiente similique.',
-          },
-          {
-            username: 'lorem.',
-            createdTime: '2021-06-05 13:29',
-            replyContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur nihil, non odit omnis sapiente similique.',
-          },
-        ]
-      },
-      {
-        category: 'DOG',
-        product: 'Bulldog',
-        item: 'dolor sit amet',
-        createdTime: '2021-06-05 13:29',
-        commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-        reply: []
-      },
-      {
-        category: 'DOG',
-        product: 'Bulldog',
-        item: 'dolor sit amet',
-        createdTime: '2021-06-05 13:29',
-        commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-        reply: []
-      },
-      {
-        category: 'DOG',
-        product: 'Bulldog',
-        item: 'dolor sit amet',
-        createdTime: '2021-06-05 13:29',
-        commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-        reply: []
-      },
-      {
-        category: 'DOG',
-        product: 'Bulldog',
-        item: 'dolor sit amet',
-        createdTime: '2021-06-05 13:29',
-        commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-        reply: []
-      },
-      {
-        category: 'DOG',
-        product: 'Bulldog',
-        item: 'dolor sit amet',
-        createdTime: '2021-06-05 13:29',
-        commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-        reply: []
-      },
-    ]
+
+
+    // this.commentItems = [
+    //   {
+    //     category: 'DOG',
+    //     product: 'Bulldog',
+    //     item: 'dolor sit amet',
+    //     createdTime: '2021-06-05 13:29',
+    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
+    //     reply: [
+    //       {
+    //         username: 'lorem.',
+    //         createdTime: '2021-06-05 13:29',
+    //         replyContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur nihil, non odit omnis sapiente similique.',
+    //       },
+    //       {
+    //         username: 'lorem.',
+    //         createdTime: '2021-06-05 13:29',
+    //         replyContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur nihil, non odit omnis sapiente similique.',
+    //       },
+    //       {
+    //         username: 'lorem.',
+    //         createdTime: '2021-06-05 13:29',
+    //         replyContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur nihil, non odit omnis sapiente similique.',
+    //       },
+    //     ]
+    //   },
+    //   {
+    //     category: 'DOG',
+    //     product: 'Bulldog',
+    //     item: 'dolor sit amet',
+    //     createdTime: '2021-06-05 13:29',
+    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
+    //     reply: []
+    //   },
+    //   {
+    //     category: 'DOG',
+    //     product: 'Bulldog',
+    //     item: 'dolor sit amet',
+    //     createdTime: '2021-06-05 13:29',
+    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
+    //     reply: []
+    //   },
+    //   {
+    //     category: 'DOG',
+    //     product: 'Bulldog',
+    //     item: 'dolor sit amet',
+    //     createdTime: '2021-06-05 13:29',
+    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
+    //     reply: []
+    //   },
+    //   {
+    //     category: 'DOG',
+    //     product: 'Bulldog',
+    //     item: 'dolor sit amet',
+    //     createdTime: '2021-06-05 13:29',
+    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
+    //     reply: []
+    //   },
+    //   {
+    //     category: 'DOG',
+    //     product: 'Bulldog',
+    //     item: 'dolor sit amet',
+    //     createdTime: '2021-06-05 13:29',
+    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
+    //     reply: []
+    //   },
+    // ]
   }
 }
 </script>
