@@ -43,7 +43,7 @@ export function getChildCommentListByCommentId(commentId){
     return request({
         url: '/getChildCommentListByCommentId',
         method: 'get',
-        data: {
+        params: {
             commentId
         }
     });
@@ -53,7 +53,7 @@ export function getCommentListByUsername(username,pageNum,pageSize){
     return request({
         url: '/getCommentListByUsername',
         method: 'get',
-        data: {
+        params: {
             username,
             pageNum,
             pageSize

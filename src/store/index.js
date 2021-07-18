@@ -1,7 +1,5 @@
 import { createStore } from 'vuex';
-import router from '../router'
 // store 中的数据存储在内存中。
-import {getCookie} from "@/utils/cookie";
 
 export default createStore({
   state: {
@@ -23,8 +21,22 @@ export default createStore({
       state.webSocket = new WebSocket(`ws://120.77.83.8:8084/websocket/${payload}`);
       console.log(state.webSocket);
       state.webSocket.onmessage = res => {
-        state.webSocketData = JSON.parse(res.data);
-        console.log(state.webSocketData);
+        let msg = JSON.parse(res.data);
+        if (Array.isArray(msg)) {
+          for (let i = 0; i < msg.length; i++) {
+            if (msg[i].messageType === 'CHAT') {
+              let temp = [];
+              temp.push(msg[i]);
+              state.webSocketData = temp;
+              break;
+            }
+          }
+          console.log(state.webSocketData);
+        } else {
+          if (msg.messageType === 'COMMENT' || msg.messageType === 'CHILDCOMMENT') return;
+          state.webSocketData = msg;
+          console.log(state.webSocketData);
+        }
       };
     },
     closeWebSocket(state) {

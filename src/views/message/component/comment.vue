@@ -3,42 +3,42 @@
     <div class="comment-content">
       <div class="comment-item-and-more-reply" v-for="(item, index) in commentItems">
         <div class="comment-item">
-          <img src="@/assets/image/petImg/dog/dogImg1.jpg" alt="" class="product-image">
-          <div class="comment-item-content">
+          <img :src="products[index].picture" alt="" class="product-image" v-if="products.length !== 0 && products[index] !== undefined">
+          <div class="comment-item-content" v-if="products.length !== 0 && products[index] !== undefined">
             <div class="your-comment">
               Your comment about：
             </div>
             <div class="product-detail">
-              {{ item.category }}---{{ item.product }}---{{ item.item }}
+              {{ products[index].categoryId }}---{{ products[index].name }}---{{ products[index].description }}
             </div>
             <div class="comment-operation">
-              {{ item.createdTime }}
-              <div class="view-reply" :class="{ 'operation-active': isViewReply[index] }" @click="isViewReply[index] = !isViewReply[index];">
+              {{ item.createTime }}
+              <div class="view-reply" :class="{ 'operation-active': isViewReply[index] }" @click="viewReply(index)">
                 <svg viewBox="0 0 1024 1024"><path d="M517.352727 15.825455C240.337455 15.825455 15.825455 240.314182 15.825455 517.352727c0 276.968727 224.512 501.527273 501.527272 501.527273 276.968727 0 501.527273-224.558545 501.527273-501.527273C1018.88 240.337455 794.065455 15.825455 517.352727 15.825455z m158.208 539.74109l-199.68 199.703273c-21.154909 21.178182-55.272727 21.178182-76.427636 0a53.922909 53.922909 0 0 1 0-76.404363l161.512727-161.512728-161.512727-161.512727a53.946182 53.946182 0 0 1 0-76.427636 53.992727 53.992727 0 0 1 76.427636 0l199.68 199.703272c21.178182 21.178182 21.178182 55.505455 0 76.450909z"></path></svg>
                 view reply
               </div>
             </div>
           </div>
           <div class="comment-message">
-            {{ item.commentMessage }}
+            {{ item.context }}
           </div>
         </div>
         <div class="view-reply-content" :class="{ 'active': isViewReply[index] }">
-          <div v-if="item.reply.length === 0" class="no-one-responded">
+          <div v-if="item.childCommentNum === 0" class="no-one-responded">
             Sorry, no one responded.
           </div>
-          <div class="reply-item" v-else v-for="reply_item in item.reply">
-            <img src="@/assets/image/avatar/avatar.jpg" alt="" class="user-avatar">
+          <div class="reply-item" v-else v-for="(reply_item, INDEX) in replies[index]">
+            <img :src="replyAvatars[index][INDEX]" alt="" class="user-avatar">
             <div class="user-reply-info">
               <div class="username">
                 {{ reply_item.username }}
               </div>
               <div class="created-time">
-                {{ reply_item.createdTime }}
+                {{ reply_item.createTime }}
               </div>
             </div>
             <div class="reply-content">
-              {{ reply_item.replyContent }}
+              {{ reply_item.username === $store.state.username ? `@${reply_item.toUsername}  ${reply_item.context}` : reply_item.context }}
             </div>
           </div>
         </div>
@@ -48,13 +48,36 @@
 </template>
 
 <script>
+
+import {getCommentListByUsername, getChildCommentListByCommentId} from "@/api/comment";
+import {getAvatar} from "@/api/user";
+import {viewProduct} from "@/api/catalog";
+
 export default {
   name: "comment",
   data() {
     return {
       commentItems: null,
       isViewReply: null,
+      products: [],
+      replies: [],
+      replyAvatars: []
     };
+  },
+  methods: {
+    viewReply(index) {
+      if(this.replyAvatars[index] === undefined) return;
+      getChildCommentListByCommentId(this.commentItems[index].commentId).then(async res => {
+        this.replies[index] = res;
+        this.isViewReply[index] = !this.isViewReply[index];
+        for (let i = 0; i < res.length; i++) {
+          let avatarURL = await getAvatar(res[i].username);
+          this.replyAvatars[index].push(avatarURL);
+        }
+      }).catch(err => {
+        console.log(err);
+      });
+    }
   },
   watch: {
     commentItems(newValue, oldValue) {
@@ -65,74 +88,17 @@ export default {
     }
   },
   created() {
-
-
-    // this.commentItems = [
-    //   {
-    //     category: 'DOG',
-    //     product: 'Bulldog',
-    //     item: 'dolor sit amet',
-    //     createdTime: '2021-06-05 13:29',
-    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-    //     reply: [
-    //       {
-    //         username: 'lorem.',
-    //         createdTime: '2021-06-05 13:29',
-    //         replyContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur nihil, non odit omnis sapiente similique.',
-    //       },
-    //       {
-    //         username: 'lorem.',
-    //         createdTime: '2021-06-05 13:29',
-    //         replyContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur nihil, non odit omnis sapiente similique.',
-    //       },
-    //       {
-    //         username: 'lorem.',
-    //         createdTime: '2021-06-05 13:29',
-    //         replyContent: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Consequatur nihil, non odit omnis sapiente similique.',
-    //       },
-    //     ]
-    //   },
-    //   {
-    //     category: 'DOG',
-    //     product: 'Bulldog',
-    //     item: 'dolor sit amet',
-    //     createdTime: '2021-06-05 13:29',
-    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-    //     reply: []
-    //   },
-    //   {
-    //     category: 'DOG',
-    //     product: 'Bulldog',
-    //     item: 'dolor sit amet',
-    //     createdTime: '2021-06-05 13:29',
-    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-    //     reply: []
-    //   },
-    //   {
-    //     category: 'DOG',
-    //     product: 'Bulldog',
-    //     item: 'dolor sit amet',
-    //     createdTime: '2021-06-05 13:29',
-    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-    //     reply: []
-    //   },
-    //   {
-    //     category: 'DOG',
-    //     product: 'Bulldog',
-    //     item: 'dolor sit amet',
-    //     createdTime: '2021-06-05 13:29',
-    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-    //     reply: []
-    //   },
-    //   {
-    //     category: 'DOG',
-    //     product: 'Bulldog',
-    //     item: 'dolor sit amet',
-    //     createdTime: '2021-06-05 13:29',
-    //     commentMessage: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab deserunt eaque inventore mollitia perspiciatis, placeat quidem recusandae tempore velit! Facilis!',
-    //     reply: []
-    //   },
-    // ]
+    getCommentListByUsername(this.$store.state.username, 1, 100).then(async res => {
+      this.commentItems = res;
+      for (let i = 0; i < res.length; i++) {
+        let product = await viewProduct(res[i].productId);
+        this.products.push(product.product);
+        this.replies.push([]);
+        this.replyAvatars.push([]);
+      }
+    }).catch(err => {
+      console.log(err);
+    });
   }
 }
 </script>
