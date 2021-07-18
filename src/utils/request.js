@@ -1,7 +1,6 @@
 import axios from "axios";
 import { ElMessage  } from "element-plus";
 import store from '../store';
-import {setCookie, getCookie} from "@/utils/cookie";
 
 const request = axios.create({
   baseURL: '/api',
@@ -38,7 +37,7 @@ request.interceptors.response.use(res => {
       return Promise.reject(res.data.code);
     }
     // setCookie('token', res.headers.authorization, 1);
-    store.commit('setToken', res.headers.authorization);
+    if (res.headers.authorization !== undefined) store.commit('setToken', res.headers.authorization);
     // 设置 Token。
     // console.log('response');
     return Promise.resolve(res.data.object);
