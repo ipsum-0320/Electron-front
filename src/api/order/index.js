@@ -26,3 +26,13 @@ export function getOrder(orderId){
         }
     });
 }
+
+export function getCommentByOrderId(orderId) {
+  return request({
+    url: '/getCommentByOrderId',
+    method: 'get',
+    params: {
+      orderId
+    }
+  })
+}
