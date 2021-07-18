@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="product-content">
-      <div class="product-title">Bulldog</div>
-      <div class="back-to-category" @click="$router.push('/main/category')">
+    <div class="product-content" v-if="itemList !== null">
+      <div class="product-title">{{product.name}}</div>
+      <div class="back-to-category" @click="$router.push({path: '/main/category', query: {categoryId:product.categoryId}})">
         <span>Back to Category</span>
       </div>
       <div class="check-trigger">
@@ -30,8 +30,8 @@
                 <div class="choose-item">
                   <div class="form-info-title">Item:</div>
                   <div class="choose-item-options">
-                    <div class="option-container" v-for="item in itemList">
-                      <input ref="itemRadio" type="radio" :id="item.itemId" :key="item.itemId" name="choose-item" class="real-radio">
+                    <div class="option-container" v-if="itemList !== null" v-for="(item, index) in itemList">
+                      <input ref="itemRadio" @click="itemIndex = index" type="radio" :id="item.itemId" :key="item.itemId" name="choose-item" class="real-radio" :checked="index === itemIndex">
                       <label :for="item.itemId" class="fake-radio">{{ item.attribute1 + item.attribute2 + item.attribute3 }}</label>
                     </div>
                   </div>
@@ -39,13 +39,13 @@
                 <div class="product-price">
                   <div class="form-info-title">Price:</div>
                   <div class="product-price-content">
-                    $200.00
+                    {{ itemList[itemIndex].listPrice }}
                   </div>
                 </div>
                 <div class="product-stock">
                   <div class="form-info-title">Stock:</div>
                   <div class="product-stock-content">
-                    153 only
+                    {{ itemList[itemIndex].quantity }} only
                   </div>
                 </div>
                 <div class="product-quantity">
@@ -58,7 +58,7 @@
                 </div>
               </div>
               <div class="buy-form-btn">
-                <div class="buy-now-btn" @click="$router.push('/main/order')">Buy now</div>
+                <div class="buy-now-btn" @click="buyNow">Buy now</div>
                 <div class="add-cart-btn" :class="{active:addCartActive}" @click="clickAddCart">
                   <span>Add to cart</span>
                   <img src="@/assets/image/svg/web_logo.svg" alt="">
@@ -117,7 +117,10 @@ export default {
       isShow: false,
       checkProduct: true,
       productId: null,
-      itemList: null
+      itemList: null,
+      product: null,
+      itemIndex: 0,
+      categoryId: null
     }
   },
   computed: {
@@ -209,11 +212,17 @@ export default {
     },
     clickTrigger() {
       this.checkProduct = !this.checkProduct
+    },
+    buyNow() {
+      this.clickAddCart()
+      this.$router.push('/main/order')
     }
   },
   created() {
     this.productId = this.$route.query.productId
     viewProduct(this.productId).then((res) => {
+      console.log(res)
+      this.product = res.product
       this.itemList = res.itemList
     }).catch((err) => {
       console.log(err)
@@ -483,7 +492,6 @@ export default {
           .choose-item {
             position: relative;
             width: 100%;
-            height: 60%;
 
             .form-info-title {
               position: absolute;

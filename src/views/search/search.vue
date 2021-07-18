@@ -44,7 +44,7 @@
           <div class="tips">Sorry, No search results.</div>
         </div>
         <div class="result" v-show="!isShow">
-          <div class="result-item" v-for="item in resultItems">
+          <div class="result-item" v-for="item in resultItems" @click="$router.push({path: '/main/product',query: {productId:item.productId }})">
             <img :src="item.picture" alt="">
             <div class="description">{{item.description}}</div>
             <div class="productId">{{item.productId}}</div>

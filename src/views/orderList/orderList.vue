@@ -5,7 +5,7 @@
         <img src="@/assets/image/svg/index/order.svg" alt="">
         <div class="order-list-text">Order List</div>
       </div>
-      <div class="empty-list" v-if="listItems.length === 0">
+      <div class="empty-list" v-if="listItems === null || listItems.length === 0">
         <img src="@/assets/image/svg/index/noCategory.svg" alt="">
         <div class="tips">Sorry, Your order list is empty.</div>
       </div>
@@ -14,8 +14,8 @@
           <div class="detail-img" @click="clickDetail(index)">
             <img src="@/assets/image/svg/order/orderId.svg" alt="">
           </div>
-          <div class="order-id">{{item.orderId}}</div>
-          <div class="order-time">{{item.orderTime}}17:32:54 18/05/2021</div>
+          <div class="order-id">#{{item.orderId}}</div>
+          <div class="order-time">{{item.orderDate}}</div>
           <div class="total-price">${{item.totalPrice}}</div>
           <div class="order-delete" :class="{'delete-active':isDelete===index}" @click="clickDelete(index)">
             <svg class="delete-icon" viewBox="0 0 1024 1024">
@@ -102,73 +102,12 @@ export default {
       isDialogShow:false,
       commentOn: null,
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
-      listItems: [
-        {
-          orderId: '#1001',
-          orderTime: '17:32:54 18/05/2021',
-          totalPrice: 240,
-          detail: [
-            {
-              productName: 'NB1',
-              quantity: 4,
-              price: 25,
-              hasEvaluated: true,
-              comment: "哇哇哇哇 帧好啊，哈哈哈哈哈哈哈",
-              stars:4
-            },
-            {
-              productName: 'NB2',
-              quantity: 4,
-              price: 25,
-              hasEvaluated: true,
-              comment: "哇哇哇哇哈哈",
-              stars:1
-            }
-          ]
-        },
-        {
-          orderId: '#1002',
-          orderTime: '17:32:54 18/05/2021',
-          totalPrice: 240,
-          detail: [
-            {
-              productName: 'NB3',
-              quantity: 4,
-              price: 25,
-              hasEvaluated: false,
-              comment: null,
-              stars: 0
-            }
-          ]
-        },
-        {
-          orderId: '#1003',
-          orderTime: '17:32:54 18/05/2021',
-          totalPrice: 240,
-          detail: [
-            {
-              productName: 'NB4',
-              quantity: 4,
-              price: 25,
-              hasEvaluated: false,
-              comment: null,
-              stars: 0
-            },
-            {
-              productName: 'NB5',
-              quantity: 4,
-              price: 25,
-              hasEvaluated: false,
-              comment: null,
-              stars: 0
-            }
-          ]
-        }
-      ]
+      listItems: null
     }
   },
   computed: {
     sumPrice() {
+      if(this.listItems === null) return
       return this.listItems.reduce((a,c) => a + c.totalPrice, 0)
     }
   },
@@ -225,7 +164,7 @@ export default {
   },
   created() {
     listOrders(this.$store.state.username).then(data => {
-      console.log(data)
+      this.listItems = data
     }).catch(err => {
       console.log(err)
     })

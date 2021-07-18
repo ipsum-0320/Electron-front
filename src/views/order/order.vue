@@ -56,6 +56,8 @@ import selectAddress from "@/views/order/selectAddress";
 import confirmOrder from "@/views/order/confirmOrder";
 import Payment from "@/views/order/payment";
 import Complete from "@/views/order/complete";
+import {finalOrder} from "@/api/order";
+
 export default {
   name: "order",
   components: {
