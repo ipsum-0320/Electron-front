@@ -81,6 +81,7 @@
 </template>
 
 <script>
+import {viewCart} from "@/api/cart";
 import {payment} from "@/api/Payment";
 import {finalOrder} from "@/api/order";
 
@@ -97,12 +98,16 @@ export default {
     clickPrevious() {
       this.$emit('switch-previous',-1)
     },
-    clickNext() {
+    async clickNext() {
       let input0 = this.$refs.ref0.value, input1 = this.$refs.ref1.value, input2 = this.$refs.ref2.value, input3 = this.$refs.ref3.value, input4 = this.$refs.ref4.value, input5 = this.$refs.ref5.value
-      let inputs = new Array()
+      let inputs = []
       inputs.push(input0,input1,input2,input3,input4,input5)
       let password = inputs.join('')
-      console.log(password)
+      let cart =await viewCart(this.$store.state.username)
+      let lineItems = []
+      for(let cartItem of cart.cartItems) {
+        lineItems.push({itemId: cartItem.item.itemId, quantity: cartItem.quantity})
+      }
       payment(password, this.$store.state.username).then(data => {
         if(data === null) {
           this.$emit('switch-next',1)
@@ -122,7 +127,7 @@ export default {
               billZip: '',
               billCountry: '',
               courier: '',
-              totalPrice: 11,
+              totalPrice: cart.subTotal,
               billToFirstName: '',
               billToLastName: '',
               shipToFirstName: '',
@@ -132,16 +137,7 @@ export default {
               cardType: '',
               locale: ''
             },
-            lineItems: [
-              {
-                itemId:'EST-3',
-                quantity: 1
-              },
-              {
-                itemId: 'EST-2',
-                quantity: 2
-              }
-            ]
+            lineItems: lineItems
           }
           finalOrder(data).then(res => {
             console.log(res)

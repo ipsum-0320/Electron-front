@@ -55,7 +55,7 @@
           </div>
           <hr v-if="showDetail === index">
           <div class="detail" v-if="showDetail === index">
-            <detail-item v-for="detail in item.detail" :info="{detail:detail,orderId:item.orderId}" @write-comment="writeComment"></detail-item>
+            <detail-item v-for="detail in details" :info="{detail:detail,orderId:item.orderId}" @write-comment="writeComment"></detail-item>
           </div>
         </div>
       </div>
@@ -70,9 +70,9 @@
         <rate ref="star" :star="commentOn.detail.stars"></rate>
       </div>
       <div class="content-description">
-        <textarea :disabled="commentOn.detail.comment != null"  class="content-description-input" ref="textarea" :value="commentOn.detail.comment"/>
+        <textarea :disabled="commentOn.detail.context != null"  class="content-description-input" ref="textarea" :value="commentOn.detail.context"/>
       </div>
-      <div class="confirm-btn dialog-btn" @click="confirm" :class="{'has-commented-btn': commentOn.detail.hasEvaluated}">
+      <div class="confirm-btn dialog-btn" @click="confirm" :class="{'has-commented-btn': commentOn.detail.hasCommented}">
         <span>comment</span>
         <svg viewBox="0 0 1024 1024"><path d="M915.515 142.82L98.213 458.2c-46.058 17.772-44.905 43.6 2.349 57.622l197.477 58.595 80.292 238.91c10.512 31.279 37.973 37.875 61.463 14.605L543.378 725.32l204.475 149.84c26.566 19.468 53.879 9.222 61.05-23.09l149.21-672.345c7.151-32.22-11.894-48.753-42.598-36.906zM791.141 294.833l-348.62 310.61c-6.268 5.586-11.941 16.653-12.812 24.847l-15.39 144.698c-1.729 16.248-7.331 16.919-12.498 1.345l-67.457-203.339c-2.64-7.954 0.976-17.705 8.022-21.93L784.5 285.882c28.174-16.898 31.173-12.907 6.64 8.951z"></path></svg>
       </div>
@@ -87,7 +87,8 @@
 
 <script>
 import DetailItem from "@/views/orderList/detailItem";
-import {listOrders} from "@/api/order";
+import {listOrders, getCommentByOrderId} from "@/api/order";
+import {makeComment} from "@/api/comment";
 import { ElDialog } from 'element-plus';
 import { ElRate } from 'element-plus'
 import Rate from "@/views/orderList/rate";
@@ -99,6 +100,7 @@ export default {
       isDelete:-1,
       toDelete:-1,
       showDetail:-1,
+      details: [],
       isDialogShow:false,
       commentOn: null,
       colors: ['#99A9BF', '#F7BA2A', '#FF9900'],
@@ -133,7 +135,40 @@ export default {
       if(this.showDetail === index) {
         this.showDetail = -1
       }else {
+        this.details = []
         this.showDetail = index
+        let orderId = this.listItems[index].orderId
+        getCommentByOrderId(orderId).then(data => {
+          console.log(data)
+          for(let i = 0; i < this.listItems[index].lineItems.length; i++) {
+            let hasCommented = false
+            let context = null
+            let stars = 0
+            let productId = this.listItems[index].lineItems[i].item.product.productId
+            let productName = this.listItems[index].lineItems[i].item.product.name
+            let price = this.listItems[index].lineItems[i].item.listPrice
+            let quantity = this.listItems[index].lineItems[i].quantity
+            for(let j = 0; j < data.length; j++) {
+              if(productId === data[j].productId) {
+                hasCommented = true
+                context = data[j].context
+                stars = data[j].stars
+                break
+              }
+            }
+            this.details.push({
+              hasCommented,
+              context,
+              stars,
+              productId,
+              productName,
+              price,
+              quantity
+            })
+          }
+        }).catch(err => {
+          console.log(err)
+        })
       }
     },
     writeComment(comment) {
@@ -142,21 +177,25 @@ export default {
     },
     confirm() {
       this.isDialogShow = false
-      let comment = this.$refs.textarea.value
-      let star = this.$refs.star.isShow
+      let context = this.$refs.textarea.value
+      let stars = this.$refs.star.isShow
+      console.log(stars)
       let orderId = this.commentOn.orderId
       let productName = this.commentOn.detail.productName
+      let productId = this.commentOn.detail.productId
+      let username = this.$store.state.username
       for(let i = 0; i < this.listItems.length; i++) {
         if(this.listItems[i].orderId === orderId) {
-          for(let j = 0; j < this.listItems[i].detail.length; j++) {
-            if(this.listItems[i].detail[j].productName === productName) {
-              this.listItems[i].detail[j].hasEvaluated = true
-              this.listItems[i].detail[j].comment = comment
-              this.listItems[i].detail[j].stars = star
+          for(let j = 0; j < this.details.length; j++) {
+            if(this.details[j].productName === productName) {
+              this.details[j].hasCommented = true
+              this.details[j].context = context
+              this.details[j].stars = stars
             }
           }
         }
       }
+      makeComment({productId, username, context, stars, orderId})
     },
     cancel() {
       this.isDialogShow = false
@@ -164,6 +203,7 @@ export default {
   },
   created() {
     listOrders(this.$store.state.username).then(data => {
+      console.log(data);
       this.listItems = data
     }).catch(err => {
       console.log(err)

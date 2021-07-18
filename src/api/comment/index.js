@@ -3,9 +3,7 @@ export function makeComment(data){
     return request({
         url: '/makeComment',
         method: 'post',
-        data: {
-            data
-        }
+        data: data
     });
 }
 

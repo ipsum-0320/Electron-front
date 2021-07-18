@@ -5,7 +5,7 @@
     <div class="quantity">×{{info.detail.quantity}}</div>
     <div class="price">${{info.detail.price}}</div>
     <div class="evaluation" @click="comment">
-      {{info.detail.hasEvaluated?"check comment":"comment"}}
+      {{info.detail.hasCommented?"check comment":"comment"}}
     </div>
     <hr>
   </div>
