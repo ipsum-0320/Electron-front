@@ -13,8 +13,8 @@
       </p>
     </div>
     <div class="image">
-      <img src="@/assets/image/index/cat-title.jpg" alt="loading..." class="fromTopImg">
-      <img src="@/assets/image/index/dog-title.jpg" alt="loading..." class="fromBottomImg">
+      <img src="@/assets/image/index/phone-title.jpg" alt="loading..." class="fromTopImg">
+      <img src="@/assets/image/index/computer-title.jpg" alt="loading..." class="fromBottomImg">
     </div>
     <div class="menu" :class="{ 'anim-menu-fade-in': anim_menu_fade_in, 'anim-menu-fade-out': anim_menu_fade_out }">
       <div class="filter" @click="toLogin" v-if="!$store.state.isLogin">
@@ -50,14 +50,14 @@ export default {
     return {
       menuOptions: ['Profile', 'Cart', 'Order', 'Message', 'Search', 'Sign Out'],
       logoLetter: [
-        { content: 'P', isMove: false },
+        { content: 'E', isMove: false },
+        { content: 'l', isMove: false },
         { content: 'e', isMove: false },
+        { content: 'c', isMove: false },
         { content: 't', isMove: false },
-        { content: 's', isMove: false },
-        { content: 't', isMove: false },
-        { content: 'o', isMove: false },
         { content: 'r', isMove: false },
-        { content: 'e.', isMove: false }
+        { content: 'o', isMove: false },
+        { content: 'n.', isMove: false }
       ],
       isMenuPulled: false,
       anim_menu_pull: false,

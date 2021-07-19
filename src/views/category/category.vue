@@ -2,7 +2,7 @@
   <div>
     <div class="container" v-if="category !== null">
       <div class="category-title">
-        <img src="@/assets/image/svg/navbar/DOGS.svg" alt="">
+        <img src="@/assets/image/svg/navbar/WATCH.svg" alt="">
         <div class="category-title-text">{{ category.name }}</div>
       </div>
       <div class="back-to-index" @click="router('/home')">

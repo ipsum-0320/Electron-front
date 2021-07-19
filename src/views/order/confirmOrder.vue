@@ -18,7 +18,7 @@
       <div class="confirm-order-content-item">
         <fieldset class="show-cart-item">
           <legend>
-            <img src="@/assets/image/svg/navbar/pet.svg" alt="">
+            <img src="@/assets/image/svg/navbar/product.svg" alt="">
             Purchased Pets
           </legend>
           <div class="cart-items">

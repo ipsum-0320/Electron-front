@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="search-logo">
-        PetStore
+        Electron
       </div>
       <div class="search-result" :class="{activer:isActive}">
         <div class="empty-result" v-show="isShow">
