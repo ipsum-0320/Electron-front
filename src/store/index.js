@@ -18,7 +18,7 @@ export default createStore({
       state.isLogin = payload;
     },
     createWebSocket(state, payload) {
-      state.webSocket = new WebSocket(`ws://120.77.83.8:8084/websocket/${payload}`);
+      state.webSocket = new WebSocket(`ws://120.77.83.8:8083/websocket/${payload}`, [state.token]);
       console.log(state.webSocket);
       state.webSocket.onmessage = res => {
         let msg = JSON.parse(res.data);

@@ -2,7 +2,7 @@
   <div class="cart-content">
     <div class="cart">
       <div class="cart-main-content">
-        <div class="empty-cart">
+        <div class="empty-cart" v-if="cart === null || cart.cartItems.length === 0">
           <img src="@/assets/image/svg/index/noCategory.svg" alt="">
           <div class="tips">Sorry, Your cart is empty.</div>
         </div>
@@ -161,7 +161,7 @@ export default {
         height: 40%;
         border: 5px dashed #11564b;
         border-radius: 10px;
-        display: none;
+        display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;

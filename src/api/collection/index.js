@@ -3,19 +3,19 @@ export function viewCollection(username) {
     return request({
         url: '/viewCollection',
         method: 'get',
-        data: {
+        params: {
             username
         }
     });
 }
 
-export function insertCollection(username,itemId){
+export function insertCollection(username,productId){
     return request({
         url: '/insertCollection',
         method: 'post',
         data: {
             username,
-            itemId
+            productId
         }
     });
 }
@@ -24,8 +24,6 @@ export function deleteCollection(data){
     return request({
         url: '/deleteCollection',
         method: 'post',
-        data: {
-            data
-        }
+        data: data
     });
 }

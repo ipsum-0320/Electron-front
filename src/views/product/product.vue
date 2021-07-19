@@ -20,8 +20,8 @@
             </div>
           </div>
           <div class="buy-form">
-            <img src="@/assets/image/svg/category/uncollection.svg" alt="" @click="triggerCollection" class="uncollection" :class="{active:collectionActive}">
-            <img src="@/assets/image/svg/category/collection.svg" alt="" @click="triggerCollection" class="collection" :class="{active: !collectionActive}">
+            <img src="@/assets/image/svg/category/uncollection.svg" alt="" @click="triggerCollection" class="uncollection" :class="{active:!collectionActive}">
+            <img src="@/assets/image/svg/category/collection.svg" alt="" @click="triggerCollection" class="collection" :class="{active: collectionActive}">
             <div class="enlarge-image" v-show="isShow" ref="enlargeImg">
               <img src="@/assets/image/petImg/dog/dogImg1.jpg" alt="" class="enlarge-image-img" ref="enlargeImgImg">
             </div>
@@ -95,6 +95,7 @@
 <script>
 import {viewProduct} from "@/api/catalog";
 import {viewCart, addItemToCart} from "@/api/cart";
+import {viewCollection, insertCollection, deleteCollection} from "@/api/collection";
 import Comment from "@/views/product/comment";
 import {ElMessage} from 'element-plus';
 
@@ -136,6 +137,14 @@ export default {
       this.quantity++
     },
     triggerCollection() {
+      if(this.collectionActive) {
+        deleteCollection({username: this.$store.state.username, productIdList: [this.productId]}).then(res => {
+          console.log(res)}).catch(err => {
+          console.log(err)
+        })
+      }else {
+        insertCollection(this.$store.state.username, this.productId)
+      }
       this.collectionActive = !this.collectionActive
     },
     clickAddCart() {
@@ -230,6 +239,17 @@ export default {
 
     viewCart(this.$store.state.username).then((res) => {
       this.quantityInCart = res.cartItems.length
+    }).catch(err => {
+      console.log(err)
+    })
+
+    viewCollection(this.$store.state.username).then(res => {
+      let productList = res.productList
+      for(let i = 0; i < productList.length; i++) {
+        if(productList[i].product.productId === this.productId) {
+          this.collectionActive = true
+        }
+      }
     }).catch(err => {
       console.log(err)
     })

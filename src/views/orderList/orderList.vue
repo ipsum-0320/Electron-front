@@ -9,8 +9,8 @@
         <img src="@/assets/image/svg/index/noCategory.svg" alt="">
         <div class="tips">Sorry, Your order list is empty.</div>
       </div>
-      <div class="list" v-else>
-        <div class="list-item" v-for="(item,index) in listItems" :key="item.orderId" :class="{'delete-cart-item': toDelete==index}">
+      <div class="list" >
+        <div class="list-item" v-if="listItems !== null" v-for="(item,index) in listItems" :key="item.orderId" :class="{'delete-cart-item': toDelete===index}">
           <div class="detail-img" @click="clickDetail(index)">
             <img src="@/assets/image/svg/order/orderId.svg" alt="">
           </div>
@@ -60,7 +60,7 @@
         </div>
       </div>
       <div class="order-counter">
-        There are&nbsp;<span></span>&nbsp;orders in total.
+        There are&nbsp;<span v-if="listItems !== null">{{listItems.length}}</span>&nbsp;orders in total.
       </div>
       <div class="total-cost">Total Cost: ${{sumPrice}}</div>
     </div>
@@ -236,7 +236,7 @@ body {
     top: 50%;
     position: absolute;
     transform: translate(-50%, -50%);
-    counter-reset: order-counter;
+    //counter-reset: order-counter;
 
     .order-list-title {
       position: absolute;
@@ -571,7 +571,6 @@ body {
 
       span::after {
         color: red;
-        content: counter(order-counter);
       }
 
     }

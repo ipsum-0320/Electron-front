@@ -13,8 +13,6 @@
           <div class="products-content" :style="{width:productWidth}">
             <div class="product" v-for="product in products" ref="product" @click="router('/main/product',product.productId)">
               <div class="mask">
-                <img src="@/assets/image/svg/category/collection.svg" alt="" v-if="false">
-                <img src="@/assets/image/svg/category/uncollection.svg" alt="" v-else>
                 <div class="product-title">
                   <div>{{ product.name }}</div><br>
                   <div>{{ product.productId }}</div>

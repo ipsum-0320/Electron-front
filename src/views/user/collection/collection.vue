@@ -1,11 +1,11 @@
 <template>
   <div class="collection-content">
     <div class="collection">
-      <div class="empty-cart" :class="{ 'show': collections.length === 0 }">
+      <div class="empty-cart" :class="{ 'show': collections === null || collections.length === 0 }">
         <img src="@/assets/image/svg/index/noCategory.svg" alt="">
         <div class="tips">Sorry, Your collection is empty.</div>
       </div>
-      <div class="collection-items">
+      <div class="collection-items" v-if="collections !== null">
         <collected-product v-for="(collection, index) in collections" :info="collection" :index="index" @cancel-collection="cancelCollection(index)"></collected-product>
       </div>
     </div>
@@ -14,39 +14,30 @@
 
 <script>
 import CollectedProduct from "@/views/user/collection/collectedProduct";
+import {viewCollection} from "@/api/collection";
+
 export default {
   name: "collection",
   components: {CollectedProduct},
   data() {
     return {
-      collections: [
-        {
-          name:'BullDog1',
-          imgSrc:'petImg/cat/catImg.jpg'
-        },
-        {
-          name:'BullDog2',
-          imgSrc:'petImg/cat/catImg.jpg'
-        },
-        {
-          name:'BullDog3',
-          imgSrc:'petImg/cat/catImg.jpg'
-        },
-        {
-          name:'BullDog4',
-          imgSrc:'petImg/cat/catImg.jpg'
-        },
-        {
-          name:'BullDog5',
-          imgSrc:'petImg/cat/catImg.jpg'
-        }
-      ]
+      collections: null
     }
   },
   methods: {
     cancelCollection(index) {
       this.collections.splice(index,1)
     }
+  },
+  created() {
+    console.log(this.$store.state.username)
+    viewCollection(this.$store.state.username).then(data => {
+      console.log(data)
+      this.collections = data.productList
+
+    }).catch(err => {
+      console.log(err)
+    })
   }
 }
 </script>
