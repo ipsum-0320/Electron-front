@@ -15,7 +15,7 @@
         <div class="nav-pet-content">
           <div class="triangle"></div>
           <div class="content">
-            <div class="nav-pet-content-option nav-pet-content-option-fish" @click="router1('FISH')">
+            <div class="nav-pet-content-option nav-pet-content-option-fish" @click="router1('DOGS')">
               <img src="@/assets/image/svg/navbar/PHONE.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">PHONE</div>
             </div>
@@ -23,11 +23,11 @@
               <img src="@/assets/image/svg/navbar/COMPUTER.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">COMPUTER</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-dog" @click="router1('DOGS')">
+            <div class="nav-pet-content-option nav-pet-content-option-dog" @click="router1('CATS')">
               <img src="@/assets/image/svg/navbar/WATCH.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">WATCH</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-cat" @click="router1('CATS')">
+            <div class="nav-pet-content-option nav-pet-content-option-cat" @click="router1('FISH')">
               <img src="@/assets/image/svg/navbar/EARPHONE.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">EARPHONE</div>
             </div>
@@ -93,7 +93,10 @@ export default {
   name: "navBar",
   methods: {
     router1(categoryId) {
-      this.$router.push({path: '/main/category', query:{categoryId: categoryId}})
+      if (this.$route.path === '/main/category') {
+        this.$EventBus.emit('update', { categoryId });
+      }
+      else this.$router.push({path: '/main/category', query:{categoryId: categoryId}})
     },
     router2(path) {
       this.$router.push(path);

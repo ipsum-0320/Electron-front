@@ -32,14 +32,15 @@
 </template>
 
 <script>
-import {viewCategory} from "@/api/catalog/index"
+import {viewCategory} from "@/api/catalog/index";
+
 export default {
   name: "category",
   data() {
     return {
       products: null,
       category: null,
-      productWidth: null
+      productWidth: null,
     }
   },
   methods: {
@@ -49,13 +50,25 @@ export default {
   },
   created() {
     viewCategory(this.$route.query.categoryId).then((data) => {
-      console.log(data)
       this.category = data.category
       this.products = data.productList;
       let len = this.products.length;
       this.productWidth = (60 * (len - 1) + 325 * len) + 'px'
     }).catch((err) => {
       console.log(err)
+    });
+    this.$EventBus.on('update', (params) => {
+      this.products = null;
+      this.category = null;
+      this.productWidth = null;
+      viewCategory(params.categoryId).then((data) => {
+        this.category = data.category
+        this.products = data.productList;
+        let len = this.products.length;
+        this.productWidth = (60 * (len - 1) + 325 * len) + 'px'
+      }).catch((err) => {
+        console.log(err)
+      });
     })
   }
 }

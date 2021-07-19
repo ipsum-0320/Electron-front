@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <nav-bar></nav-bar>
-    <router-view></router-view>
+    <div class="background-color">
+      <router-view></router-view>
+    </div>
     <div class="chat-tips-window" :class="{ 'receive-msg': receiveMsgAnimation }">
       <div class="info">
         <img :src="avatar !== undefined ? avatar : ''" alt="" class="avatar">
@@ -65,6 +67,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.background-color {
+  width: 100vw;
+  height: 88vh;
+  background-color: #A0EEE1;
+}
 
 .chat-tips-window {
   position: fixed;

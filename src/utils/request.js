@@ -19,6 +19,10 @@ request.interceptors.request.use(config => {
 }, err => {
   return Promise.reject(err);
 });
+/*
+ * 同一时间只能登陆一个账户，否则 token 会失效。
+ */
+
 
 request.interceptors.response.use(res => {
   if (res.status !== 200) {
@@ -37,7 +41,9 @@ request.interceptors.response.use(res => {
       return Promise.reject(res.data.code);
     }
     // setCookie('token', res.headers.authorization, 1);
-    if (res.headers.authorization !== undefined) store.commit('setToken', res.headers.authorization);
+    if (res.headers.authorization !== undefined) {
+      store.commit('setToken', res.headers.authorization);
+    }
     // 设置 Token。
     // console.log('response');
     return Promise.resolve(res.data.object);
