@@ -4,7 +4,7 @@
       <div class="container">
         <div class="left-tips">
           <img src="@/assets/image/svg/index/rightCategory.svg" alt="">
-          <div class="tips">Your pet is on the right!</div>
+          <div class="tips">Your phone is on the right!</div>
         </div>
         <category_item v-for="category in categories" :category="category"></category_item>
         <div class="right-tips">
@@ -44,7 +44,7 @@ export default {
   },
   data() {
     return {
-      categories: ['IPHONE', 'SAMSUNG', 'DOGS', 'CATS', 'REPTILES'],
+      categories: ['PHONE', 'COMPUTER', 'WATCH', 'EARPHONE', 'PAD'],
       contentWidth: undefined,
       containerWidth: undefined,
       contentOffset: undefined,
