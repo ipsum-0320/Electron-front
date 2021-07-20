@@ -74,11 +74,11 @@ export default {
     onfocus() {
       if (this.isActive) return;
       this.isActive = true
-      this.autoCompleteItems=['iphone12','huaweiP40','iphone12Pro','OPPOreno5']
+      this.autoCompleteItems=['airPods2','huawei freelace','Apple watch6','Oppo Reno6']
     },
     oninput() {
       if(this.context === '') {
-        this.autoCompleteItems = ['iphone12','huaweiP40','iphone12Pro','OPPOreno5']
+        this.autoCompleteItems = ['airPods2','huawei freelace','Apple watch6','Oppo Reno6']
       } else {
         autoComplete(this.context).then(data => {
           this.autoCompleteItems = data.slice(0,5)

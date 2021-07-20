@@ -12,18 +12,18 @@
         <div class="product-container" v-if="checkProduct">
           <div class="product-info">
             <div class="product-main-image" @mousemove="mouseMove()" @mouseleave="mouseLeave()" ref="mainImg">
-              <img :src='require("@/assets/image/petImg" + mainImg)' alt="">
+              <img :src='mainImg' alt="" :style="{ 'filter': getStyle }">
               <div class="pointer-box" v-show="isShow" ref="pointerBox"></div>
             </div>
             <div class="thumbnail-images">
-              <img v-for="(img,index) in imgs" :src='require("@/assets/image/petImg"+img)' @click="clickImg(index)" alt="" tabindex="-1">
+              <img v-for="(img,index) in imgs" :src='img' @click="clickImg(index)" alt="" tabindex="-1">
             </div>
           </div>
           <div class="buy-form">
             <img src="@/assets/image/svg/category/uncollection.svg" alt="" @click="triggerCollection" class="uncollection" :class="{active:!collectionActive}">
             <img src="@/assets/image/svg/category/collection.svg" alt="" @click="triggerCollection" class="collection" :class="{active: collectionActive}">
             <div class="enlarge-image" v-show="isShow" ref="enlargeImg">
-              <img src="@/assets/image/petImg/dog/dogImg1.jpg" alt="" class="enlarge-image-img" ref="enlargeImgImg">
+              <img :src="mainImg" alt="" class="enlarge-image-img" ref="enlargeImgImg" :style="{ 'filter': getStyle }">
             </div>
             <form class="buy-form-content">
               <div class="buy-form-info">
@@ -108,12 +108,7 @@ export default {
       quantityInCart: null,
       collectionActive: false,
       addCartActive: false,
-      imgs: [
-        "/dog/dogImg1.jpg",
-        "/dog/dogImg2.jpg",
-        "/dog/dogImg3.jpg",
-        "/dog/dogImg4.jpg"
-      ],
+      imgs: [],
       mainImgIndex: 0,
       isShow: false,
       checkProduct: true,
@@ -127,7 +122,10 @@ export default {
   computed: {
     mainImg() {
       return this.imgs[this.mainImgIndex]
-    }
+    },
+    getStyle() {
+      return `hue-rotate(${this.mainImgIndex * 50}deg)`;
+    },
   },
   methods: {
     subQuantity() {
@@ -230,9 +228,9 @@ export default {
   created() {
     this.productId = this.$route.query.productId
     viewProduct(this.productId).then((res) => {
-      console.log(res)
-      this.product = res.product
-      this.itemList = res.itemList
+      this.product = res.product;
+      this.imgs.push(this.product.picture, this.product.picture, this.product.picture, this.product.picture);
+      this.itemList = res.itemList;
     }).catch((err) => {
       console.log(err)
     })
@@ -410,6 +408,22 @@ export default {
           cursor: pointer;
           object-fit: contain;
 
+          &:nth-child(1) {
+            filter: hue-rotate(0deg);
+          }
+
+          &:nth-child(2) {
+            filter: hue-rotate(50deg);
+          }
+
+          &:nth-child(3) {
+            filter: hue-rotate(100deg);
+          }
+
+          &:nth-child(4) {
+            filter: hue-rotate(150deg);
+          }
+
           &:focus {
             border: 2px solid #11564b;
           }
@@ -570,7 +584,7 @@ export default {
                   border-radius: 10px;
                   box-sizing: border-box;
                   font-weight: bold;
-                  font-size: 18px;
+                  font-size: 16px;
                   color: #11564b;
                   transition: background-color .5s, color .5s;
                   &:hover {

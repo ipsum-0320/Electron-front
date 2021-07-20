@@ -15,23 +15,23 @@
         <div class="nav-pet-content">
           <div class="triangle"></div>
           <div class="content">
-            <div class="nav-pet-content-option nav-pet-content-option-fish" @click="router1('DOGS')">
+            <div class="nav-pet-content-option nav-pet-content-option-fish" @click="router1('PHONE')">
               <img src="@/assets/image/svg/navbar/PHONE.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">PHONE</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-bird" @click="router1('BIRDS')">
+            <div class="nav-pet-content-option nav-pet-content-option-bird" @click="router1('COMPUTER')">
               <img src="@/assets/image/svg/navbar/COMPUTER.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">COMPUTER</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-dog" @click="router1('CATS')">
+            <div class="nav-pet-content-option nav-pet-content-option-dog" @click="router1('WATCH')">
               <img src="@/assets/image/svg/navbar/WATCH.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">WATCH</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-cat" @click="router1('FISH')">
+            <div class="nav-pet-content-option nav-pet-content-option-cat" @click="router1('EARPHONE')">
               <img src="@/assets/image/svg/navbar/EARPHONE.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">EARPHONE</div>
             </div>
-            <div class="nav-pet-content-option nav-pet-content-option-reptile" @click="router1('REPTILES')">
+            <div class="nav-pet-content-option nav-pet-content-option-reptile" @click="router1('PAD')">
               <img src="@/assets/image/svg/navbar/PAD.svg" alt="" class="icon">
               <div class="icon-font nav-pet-content-font">PAD</div>
             </div>

@@ -5,7 +5,7 @@
       <img src="@/assets/image/svg/cart/checked.svg" alt="" class="checked-icon">
     </label>
     <div class="cart-item-img">
-      <img src="@/assets/image/petImg/dog/dogImg1.jpg" alt="">
+      <img :src="cartItem.item.product.picture" alt="">
     </div>
     <div class="productId">{{cartItem.item.product.name}}</div>
     <div class="description">{{cartItem.item.attribute1 + cartItem.item.attribute2 + cartItem.item.attribute3}}</div>

@@ -65,7 +65,7 @@
       <div class="total-cost">Total Cost: ${{sumPrice}}</div>
     </div>
     <el-dialog v-model="isDialogShow" destroy-on-close>
-      <div class="dialog-title">Write Yout Comment</div>
+      <div class="dialog-title">Write Your Comment</div>
       <div class="dialog-rate">
         <rate ref="star" :star="commentOn.detail.stars"></rate>
       </div>
@@ -92,6 +92,8 @@ import {makeComment} from "@/api/comment";
 import { ElDialog } from 'element-plus';
 import { ElRate } from 'element-plus'
 import Rate from "@/views/orderList/rate";
+import {viewProduct} from "@/api/catalog";
+
 export default {
   name: "orderList",
   components: {Rate, DetailItem,ElDialog,ElRate},
@@ -122,9 +124,8 @@ export default {
       }
     },
     confirmDelete(index) {
-      this.isDelete = -1
-
-      this.toDelete = index
+      this.isDelete = -1;
+      this.toDelete = index;
       setTimeout(() => {
         this.toDelete = -1
         this.listItems.splice(index,1)
@@ -138,8 +139,7 @@ export default {
         this.details = []
         this.showDetail = index
         let orderId = this.listItems[index].orderId
-        getCommentByOrderId(orderId).then(data => {
-          console.log(data)
+        getCommentByOrderId(orderId).then(async data => {
           for(let i = 0; i < this.listItems[index].lineItems.length; i++) {
             let hasCommented = false
             let context = null
@@ -153,9 +153,11 @@ export default {
                 hasCommented = true
                 context = data[j].context
                 stars = data[j].stars
-                break
+                break;
               }
             }
+            let product = await viewProduct(productId);
+            let product_picture = product.product.picture;
             this.details.push({
               hasCommented,
               context,
@@ -163,7 +165,8 @@ export default {
               productId,
               productName,
               price,
-              quantity
+              quantity,
+              product_picture
             })
           }
         }).catch(err => {
@@ -172,14 +175,13 @@ export default {
       }
     },
     writeComment(comment) {
-      this.isDialogShow = true
-      this.commentOn = comment
+      this.isDialogShow = true;
+      this.commentOn = comment;
     },
     confirm() {
       this.isDialogShow = false
       let context = this.$refs.textarea.value
       let stars = this.$refs.star.isShow
-      console.log(stars)
       let orderId = this.commentOn.orderId
       let productName = this.commentOn.detail.productName
       let productId = this.commentOn.detail.productId
@@ -203,7 +205,6 @@ export default {
   },
   created() {
     listOrders(this.$store.state.username).then(data => {
-      console.log(data);
       this.listItems = data
     }).catch(err => {
       console.log(err)
@@ -366,6 +367,9 @@ body {
 
         hr {
           width: 100%;
+          height: 1px;
+          border: none;
+          border-top: 1px solid #11564b;
         }
 
         &.delete-cart-item {

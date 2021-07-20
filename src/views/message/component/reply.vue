@@ -71,7 +71,9 @@ export default {
         toUsername: this.replyItems[index].username === this.$store.state.username ? this.replyItems[index].toUsername : this.replyItems[index].username,
         context: this.reply_content
       };
+      console.log(replyPackage);
       makeReply(replyPackage).then(res => {
+        console.log(res);
         this.isDialogShow = false;
         this.reply_content = '';
         ElMessage({

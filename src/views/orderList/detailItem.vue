@@ -1,6 +1,6 @@
 <template>
   <div class="detail-item">
-    <img src="@/assets/image/petImg/cat/catImg.jpg" alt="">
+    <img :src="info.detail.product_picture" alt="">
     <div class="product-name">{{ info.detail.productName }}</div>
     <div class="quantity">×{{info.detail.quantity}}</div>
     <div class="price">${{info.detail.price}}</div>
@@ -15,6 +15,11 @@
 export default {
   name: "detailItem",
   props: ['info'],
+  data() {
+    return {
+      product_picture: undefined
+    };
+  },
   methods: {
     comment() {
       this.$emit('write-comment',this.info)
@@ -30,6 +35,13 @@ export default {
   justify-content: flex-start;
   align-content: center;
   flex-wrap: wrap;
+
+  hr {
+    width: 100%;
+    height: 1px;
+    border: none;
+    border-top: 1px solid #11564b;
+  }
 
   div:not(.evaluation) {
     margin-top: 1vw;

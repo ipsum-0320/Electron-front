@@ -245,7 +245,7 @@ export default {
             content: 'click for details';
             position: absolute;
             width: max-content;
-            left: 50%;
+            left: 23%;
             bottom: 0;
             transform: translate(-50%, 10px);
             color: #11564b;

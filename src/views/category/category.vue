@@ -2,7 +2,7 @@
   <div>
     <div class="container" v-if="category !== null">
       <div class="category-title">
-        <img src="@/assets/image/svg/navbar/WATCH.svg" alt="">
+        <img :src="require(`@/assets/image/svg/navbar/${category.name.toUpperCase()}.svg`)" alt="">
         <div class="category-title-text">{{ category.name }}</div>
       </div>
       <div class="back-to-index" @click="router('/home')">
@@ -11,7 +11,12 @@
       <div class="category-content" >
         <div class="products">
           <div class="products-content" :style="{width:productWidth}">
-            <div class="product" v-for="product in products" ref="product" @click="router('/main/product',product.productId)">
+            <div class="product" v-for="product in products" @click="router('/main/product',product.productId)" :style="{ 'background-image': `url(${product.picture})` }">
+<!--
+有三个需要更改的地方：
+1.home
+2.navbar
+-->
               <div class="mask">
                 <div class="product-title">
                   <div>{{ product.name }}</div><br>
@@ -48,6 +53,8 @@ export default {
   },
   created() {
     viewCategory(this.$route.query.categoryId).then((data) => {
+      console.log(this.$route.query.categoryId);
+      console.log(data);
       this.category = data.category
       this.products = data.productList;
       let len = this.products.length;
@@ -68,7 +75,7 @@ export default {
         console.log(err)
       });
     })
-  }
+  },
 }
 </script>
 
@@ -197,7 +204,8 @@ export default {
           border-radius: 10px;
           border-left: 3px solid #11564b;
           border-right: 3px solid #11564b;
-          background-image: url("~@/assets/image/petImg/dog/dogImg1.jpg");
+          background-image: url("~@/assets/image/skeleton/loading.gif");
+          background-position: center;
           background-size: cover;
           transition: box-shadow .5s, transform .5s;
 
