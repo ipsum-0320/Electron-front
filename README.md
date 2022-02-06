@@ -1,4 +1,4 @@
-# Electron 的运行效果如下
+# Electron-front 的运行效果如下
 
 ## 用户登录：
 ![image-20211110171132867](https://user-images.githubusercontent.com/59858262/152684116-66e52be2-4ea3-4539-a6ac-7609e0034149.png)
